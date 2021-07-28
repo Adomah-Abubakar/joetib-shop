@@ -9,4 +9,12 @@ __pycache__/
 # Django #
 *.log
 db.sqlite3
+*.sqlite3
+.env
 media
+media/*
+
+venv/
+env/
+venv/*
+env/*
