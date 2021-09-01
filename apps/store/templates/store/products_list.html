@@ -1,0 +1,29 @@
+{% extends '_base.html' %}
+
+
+{% block content %}
+<div class="container py-5">
+    <label >Search</label>
+    <input type="search" name="q" class="w-100 form-control">
+    <div class="container-fluid py-5">
+        <div class="row">
+            {% for product in products %}
+            <div class="col-6 col-md-4 col-lg-3 p-2">
+                <div class="product-card h-100">
+                    <div class="product-card-image">
+                        <img src="{{ product.image.url }}" class="product-image">
+                    </div>
+                    <div class="product-card-description card-body">
+                        <h6 class="m-0">{{ product.name }}</h6>
+                        <p class="text-truncate m-0 text-sm">{{ product.description}}</p>
+                        <h5 class="m-0">GH {{ product.price }}</h5>
+                    </div>
+                    <a href="#" class="btn rounded-0 btn-primary w-100">Add to Order</a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock content %}
+

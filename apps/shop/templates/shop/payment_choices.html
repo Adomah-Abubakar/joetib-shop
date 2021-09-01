@@ -1,0 +1,73 @@
+{% extends '_base.html' %}
+{% load crispy_forms_tags %}
+{% block content %}
+
+<div class="container  py-5">
+    <div class="row">
+        <div class="col-md-6 col-lg-7 py-3">
+            <div class="bg-white text-dark py-3 px-4">
+                <div class="container">
+                    <h3 >Choose Payment Option</h3>
+                    <hr>
+                    <form action="." method="POST">
+                        {% csrf_token %}
+                        {{ payment_choice_form | crispy }}
+                        <div class="form-group">
+                            <input type="submit" class="btn btn-primary" value="Proceed">
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    <div class="col-md-6 col-lg-5 py-3">
+        <div class="bg-white p-4 text-dark">
+            <h4>Cart</h4>
+            <div class="py-2">
+
+                <table class="table table-striped">
+                    <tbody>
+                        <tr class="font-weight-bold">
+                            <td>Name</td>
+                            <td>Price</td>
+                            <td>Qty</td>
+                            <td>Total</td>
+                        </tr>
+
+                        {% for order_item in order.order_items.all %}
+                        <tr id="order-item-{{ order_item.pk}}">
+                            <td>
+                                <h6 class="text-md">{{ order_item.product.name }}</h6>
+                            </td>
+                            <td>
+                                {% if order_item.product.discount_price %}
+                                <p class="product-card-price text-md">
+                                    GH&#8373;{{ order_item.product.discount_price }}</p>
+                                <p class="product-card-discount-price d-block">
+                                    GH&#8373;{{ order_item.product.price }}</p>
+                                {% else %}
+                                <p class="product-card-price text-md">GH&#8373;{{ order_item.product.price }}</p>
+                                {% endif %}
+                            </td>
+                            <td class="d-flex align-items-center justify-content-center tex-md">
+                                {{ order_item.quantity }}
+                            </td>
+                            <td class="text-md">
+                                GH&#8373;
+                                <span id="order-item-{{ order_item.pk}}-total">
+                                    {{ order_item.get_total_price }}
+                                </span>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="5" class="text-center">There are no items in your cart.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+{% endblock content %}

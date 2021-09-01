@@ -1,0 +1,80 @@
+{% extends '_base.html' %}
+
+{% load crispy_forms_tags %}
+
+{% block content %}
+<div class="container py-5">
+    <h1>Supply: {{ supply.date_created }}</h1>
+    <table class="table shadow my-4">
+        <tbody>
+            <tr>
+                <td>Total Cost</td>
+                <td>{{ supply.get_total_cost }}</td>
+            </tr>
+            <tr>
+                <td>Total Estimated Profit</td>
+                <td>{{ supply.get_estimated_profit }}</td>
+            </tr>
+            <tr>
+                <td>Percentage Profit</td>
+                <td>{{ supply.get_estimated_percentage_profit }}</td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-striped shadow">
+        <thead class="bg-dark text-light">
+            <tr>
+                <td>Product Name</td>
+                <td>Stock Quantity</td>
+                <td>Available Quantity</td>
+                <td>Stock Price per Item</td>
+                <td>Current Selling Price</td>
+                <td>Total Cost Price</td>
+
+                <td>Starting Estimated Profit</td>
+                <td>Estimated Profit</td>
+                <td></td>
+            </tr>
+        </thead>
+        <tbody>
+            {% for stock in supply.stocks.all %}
+            <tr>
+                <td>{{ stock.product.name }}</td>
+                <td>{{ stock.stock_quantity}}</td>
+                <td>{{ stock.available_quantity }}</td>
+                <td>{{ stock.single_item_price }}</td>
+                <td>{{ stock.product.price }}</td>
+                <td>{{ stock.get_total_cost }}</td>
+
+                <td>{{ stock.starting_estimated_profit }}</td>
+                {% with stock.get_estimated_profit as profit %}
+                {% if profit > 0 %}
+                <td class="text-success">{{ profit }}</td>
+                {% else %}
+                <td class="text-danger">{{ profit }}</td>
+                {% endif %}
+                {% endwith %}
+                <td>
+                    <a class="btn btn-sm btn-outline-primary" href="{{ stock.get_update_url }}">Details</a>
+                </td>
+            </tr>
+
+            {% empty %}
+            <tr>
+                <td colspan="6" class="text-danger">There are no stocks at the moment.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <div class="container container-slim py-5">
+        <h2 class="text-center mb-4">Enter Stock Details.</h2>
+        <form class="shadow px-4 p-5" action="{{ supply.get_add_stock_url }}" method="POST"
+            enctype="multipart/form-data">
+            {% crispy stock_form %}
+            <div class="form-group ">
+                <input type="submit" value="Save" class="btn btn-primary form-control">
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock content %}

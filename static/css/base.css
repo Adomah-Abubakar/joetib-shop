@@ -1,5 +1,6 @@
 /* Sticky footer styles
 -------------------------------------------------- */
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400&display=swap');
 html {
   position: relative;
   min-height: 100%;
@@ -10,14 +11,91 @@ html {
     font-size: 16px;
   }
 }
+:root{
+  --primary-color: #03a099;
+  --accent-color: #c18700;
+  --main-background: #fafaff;
+  --white-color: white;
+  --light-color: #aaa;
+  --dark-color: #444;
+}
+body.dark-mode {
+  --light-color: #777;
+  --main-background: #333;
+  --white-color: #444;
+  --dark-color: #ffffff;
 
+}
+/* Colors */
+.bg-white{
+  background: var(--white-color) !important;
+}
+.bg-primary{
+  background: var(--primary-color) !important;
+}
+.bg-light{
+  background: var(--light-color) !important;
+}
+.bg-main{
+  background: var(--main-background) !important;
+}
+.bg-dark {
+  background: var(--dark-color) !important;
+}
+.bg-accent {
+  background: var(--accent-color) !important;
+}
+.custom-btn-primary{
+  background: var(--primary-color) !important;
+}
+.custom-btn-primary:hover{
+  background: var(--primary-color) !important;
+}
+.btn-accent{
+  background: var(--accent-color) !important;
+}
+.btn-accent:hover{
+  background: var(--accent-color) !important;
+}
+.text-primary{
+  color: var(--primary-color) !important;
+}
+.text-accent{
+  color: var(--accent-color) !important;
+}
+.text-light{
+  color: var(--light-color) !important;
+}
+.text-white {
+  color: var(--white-color) !important;
+}
+.text-dark{
+  color: var(--dark-color) !important;
+}
+.text-white-fixed{
+  color: white;
+}
+.text-dark-fixed{
+  color: #333;
+}
+.bg-dark-fixed{
+  background: #333;
+}
+.bg-light-fixed{
+  background: #ccc;
+}
+.text-light-fixed{
+  color: #ccc;
+}
+/* End colors */
 body {
-  margin-bottom: 60px; /* Margin bottom by footer height */
+  background: var(--main-background);
+  font-family: 'Open Sans', sans-serif;
+  font-size: 0.9em;
+  color: var(--dark-color);
 }
 
-.container {
-  max-width: 960px;
-}
+
 
 .pricing-header {
   max-width: 700px;
@@ -29,5 +107,127 @@ body {
   width: 100%;
   height: 60px; /* Set the fixed height of the footer here */
   line-height: 60px; /* Vertically center the text there */
-  background-color: #f5f5f5;
+  background-color: var(--main-background);
+}
+
+.container-slim{
+  max-width: 680px;
+}
+textarea.form-control {
+  height: 100px;
+}
+.products-grid {
+  padding: 2rem 0.2rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fill , minmax(150px, 1fr) );
+  grid-template-rows: auto;
+  background: var(--white-color);
+  gap: 0.7em;
+}
+.product-detail-image{
+  max-height: 70vh;
+}
+.product-detail-image img{
+  max-height: 70vh;
+  width: 100%;
+  object-position: center;
+  object-fit: contain;
+}
+.product-card{
+  background: var(--white-color);
+  color: var(--dark-color);
+}
+.product-card:hover{
+  box-shadow: 0 0 7px rgba(0,0,0,0.09);
+}
+.product-card-image img {
+  object-fit: contain;
+  object-position: center;
+  width: 100%;
+  height: 150px;
+}
+.product-card-description {
+  padding: 0.9em 0.9em 0.1em;
+}
+.product-card-name{
+  color: var(--dark-color);
+  margin: 0;
+}
+.product-card-category{
+  color: var(--dark-color);
+  font-size: 0.9em;
+  margin: 0;
+  padding-bottom: 5px;
+}
+.product-card-discount-price {
+  text-decoration: line-through;
+  color: var(--light-color);
+  display: inline-block;
+  margin: 0;
+  font-size: 0.7rem;
+}
+  .product-card-price {
+  font-weight: bold;
+  margin: 0;
+  display: inline-block;
+}
+a, a:hover {
+  color: unset;
+  text-decoration: none;
+}
+
+.sidebar-navitem{
+  padding: 20px 5px;
+  margin: 5px 0;
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+.sidebar-nav{
+  height: 95vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+}
+.sidebar-navitem:hover {
+  position: relative;
+
+  border-bottom: 2px solid #444;
+  border-top: 2px solid #444;
+  
+}
+@media only screen and (max-width: 567px){
+  /* For mobile devices */
+  
+  .sidebar-navitem .text {
+    display: none;
+  }
+  
+  .sidebar-navitem:hover .text{
+    min-width: 150px;
+    height: 100%;
+    top: 0;
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    left: 100%;
+
+  }
+}
+
+.text-lg {
+  font-size: 1.2em;
+}
+.text-md{
+  font-size: 0.9em;
+}
+.text-sm{
+  font-size: 0.7rem;
+
+}
+.alert-error {
+  background: rgb(196, 55, 55);
+  color: white;
 }

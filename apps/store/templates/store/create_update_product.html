@@ -1,0 +1,14 @@
+{% extends '_base.html' %}
+{% load crispy_forms_tags %}
+{% block content %}
+
+<div class="container container-slim py-5">
+    <h2 class="text-center mb-4">Enter Product Details.</h2>
+    <form class="shadow px-4 p-5" action="." method="POST" enctype="multipart/form-data">
+        {% crispy product_form %}
+        <div class="form-group ">
+            <input type="submit" value="Save" class="btn btn-primary form-control">
+        </div>
+    </form>
+</div>
+{% endblock content %}

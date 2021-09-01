@@ -1,0 +1,18 @@
+<div class="product-card">
+    <a href="{{ product.get_absolute_url }}">
+        <div class="product-card-image">
+            <img src="{{ product.image.url }}">
+        </div>
+        <div class="product-card-description">
+            <p class="product-card-name">{{ product.name }}</h5>
+            <p class="product-card-category">{{ product.category }}</p>
+            {% if product.discount_price %}
+            <p class="product-card-price">GH&#8373;{{ product.discount_price }}</p>
+            <p class="product-card-discount-price">GH&#8373;{{ product.price }}</p>
+            {% else %}
+            <p class="product-card-price">GH&#8373;{{ product.price }}</p>
+            {% endif %}
+        </div>
+    </a>
+
+</div>

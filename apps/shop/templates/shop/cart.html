@@ -1,0 +1,102 @@
+{% extends '_base.html' %}
+
+
+{% block content %}
+<div class="container py-3">
+    <div class="bg-primary text-white-fixed py-3">
+        <div class="container">Cart</div>
+    </div>
+    <div class="pb-5" style="overflow-x: auto;">
+        <table class="table table-striped" >
+            <tbody>
+                <tr>
+                    <td>#</td>
+                    <td>Image</td>
+                    <td>Name</td>
+                    <td>Price</td>
+                    <td>Quantity</td>
+                    <td>Total Price</td>
+                </tr>
+
+                {% for order_item in order.order_items.all %}
+                <tr id="order-item-{{ order_item.pk}}">
+                    <td>{{ forloop.counter }}</td>
+                    <td><img class="img-thumbnail img-responsive" style="width: 80px; height: 80px;"
+                            src="{{ order_item.product.image.url }}"><img></td>
+                    <td>
+                        <h6>{{ order_item.product.name }}</h6>
+                        <p class="text-sm">{{ order_item.product.description | truncatewords:10 }}</p>
+
+                    </td>
+                    <td>
+                        {% if order_item.product.discount_price %}
+                        <p class="product-card-price">GH&#8373;{{ order_item.product.discount_price }}</p>
+                        <p class="product-card-discount-price d-block">GH&#8373;{{ order_item.product.price }}</p>
+                        {% else %}
+                        <p class="product-card-price">GH&#8373;{{ order_item.product.price }}</p>
+                        {% endif %}
+                    </td>
+                    <td class="d-flex align-items-center justify-content-center">
+                        <button class=" btn btn-sm btn-light update-quantity"
+                            data-url="{% url 'shop:add-product-to-cart-json' order_item.product.pk %}?quantity=-1"
+                            data-target="#order-item-{{ order_item.pk }}-price" data-total="#order-item-{{ order_item.pk}}-total" data-parent="#order-item-{{ order_item.pk}}"><i class="fa fa-angle-left"></i></button>
+                        <span class="p-2" id="order-item-{{ order_item.pk }}-price">{{ order_item.quantity }}</span>
+                        <button class=" btn btn-sm btn-light  update-quantity"
+                            data-url="{% url 'shop:add-product-to-cart-json' order_item.product.pk %}?quantity=1"
+                            data-target="#order-item-{{ order_item.pk }}-price" data-total="#order-item-{{ order_item.pk}}-total" data-parent="#order-item-{{ order_item.pk}}"><i class="fa fa-angle-right"></i></button>
+                    </td>
+                    <td >GH&#8373; <span id="order-item-{{ order_item.pk}}-total">{{ order_item.get_total_price }}</span></td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5" class="text-center">There are no items in your cart.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <div class="py-4 ">
+
+            <div class="text-right">
+                <a href="{% url 'shop:checkout' %}" class="btn btn-lg m-3 btn-accent text-white-fixed">CheckOut</a>
+                <p>
+                    <a class="font-weight-bold text-accent text-lg" href="{% url 'shop:product-list' %}">&gt; Continue
+                        Shoping... </a>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+
+{% block extra_js %}
+<script>
+    function update_item(data, element) {
+        if (data.quantity === 0){
+            document.querySelector(element.dataset.parent).remove();
+        } else {
+
+            target = document.querySelector(element.dataset.target);
+            target.innerText = data.quantity;
+            document.querySelector(element.dataset.total).innerText = data.total
+        }
+        
+    }
+    function update_quantity() {
+        fetch(this.dataset.url)
+        .then(e => e.json())
+        .then(e => update_item(e, this))
+        .catch(e => {
+            console.log(e);
+            alert("Sorry could not update Cart");
+        });
+    }
+
+    function setupcartfunctions() {
+        document.querySelectorAll('.update-quantity').forEach(element => {
+            element.addEventListener('click', update_quantity);
+        });
+    }
+    setupcartfunctions()
+</script>
+{% endblock %}

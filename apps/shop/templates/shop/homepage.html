@@ -1,0 +1,48 @@
+{% extends '_base.html' %}
+
+
+{% block content %}
+<div class="container py-3">
+    <div class="row">
+        <div class="col-sm-4 pt-4 px-1 px-md-2 col-lg-3">
+            <div class="shadow bg-white">
+                <div class="p-3 text-light bg-primary">
+                    Categories
+                </div>
+                <div class="container">
+                    {% for category in categories %}
+                    <div class="py-2 border border-top-0 border-left-0 border-right-0">
+                        {{ category }}
+                    </div>
+                    {% empty %}
+                    <div class="text-danger">
+                        Sorry there are no categories
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+        </div>
+        <div class="col-sm-8 px-1 px-md-2 pt-4  col-lg-9">
+            <div class=" shadow bg-primary text-light p-3">
+                Products
+            </div>
+            <div class="products-grid shadow bg-white">
+                {% for product in products %}
+                {% include 'shop/_partials/_product_card.html' %}
+                {% empty %}
+                <div class="col-12 text-center text-danger">
+                    Sorry there are no products at the moment.
+                </div>
+                {% endfor %}
+
+            </div>
+            <div class="bg-white pt-4 pb-2">
+
+                {% include "shop/_partials/_pagination.html" %}
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endblock %}

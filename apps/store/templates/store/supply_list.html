@@ -1,0 +1,28 @@
+{% extends '_base.html' %}
+
+{% load crispy_forms_tags %}
+{% load humanize %}
+{% block content %}
+<div class="container py-5">
+    <h1>Supplies</h1>
+    <div class="row">
+        {% for supply in supplies %}
+        <div class="col-sm-6 col-md-6 col-lg-4 py-3">
+            <a href="{{ supply.get_absolute_url }}">
+            <div class="shadow py-2">
+                <div class="card-body">
+                    <h4>Supply: {{ supply.date_created | naturaltime }}</h4>
+                    <p>Total Cost: {{ supply.get_total_cost }}</p>
+                    <p>Total Estimated Profit: {{ supply.get_estimated_profit }}</p>
+                    <p>Percentage Profit: {{ supply.get_estimated_percentage_profit }}</p>
+                </div>
+            </div>
+            </a>
+
+        </div>
+        {% endfor %}
+    </div>
+
+
+</div>
+{% endblock content %}

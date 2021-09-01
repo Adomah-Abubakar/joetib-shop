@@ -1,0 +1,134 @@
+{% extends "_base.html" %}
+
+{% block title %}Cart{% endblock %}
+
+
+
+{% block content %}
+
+<!--================Cart Area =================-->
+<section class="cart_area">
+    <div class="container-fluid">
+
+        <div class="py-5">
+            <div class="table-responsive px-md-3 py-3">
+                {% for order in orders %}
+                <div class="car shadow mb-5" style="overflow-x: auto;">
+                    <div class="card-header p-0 px-md-2  bg-main border-0">
+                        <div class="container-fluid">
+                            <div class="row">
+
+
+                                <div class="col-12 col-md-6">
+
+                                    <p class="m-0 ">{{ order.ordered_date }}</p>
+                                    <p class=" m-0  pr-5 font-weight-bold">GH&#8373;{{ order.amount }}</p>
+                                </div>
+                                <div class="col-12 col-md-6  m-0 d-flex flex-row align-items-center">
+                                    {% if not order.received %}
+                                    <a href="{{ order.get_mark_as_received_url }}" class="btn btn-warning">Mark as
+                                        Received</a>
+                                    {% else %}
+                                    <span class="text-warning">Completed</span>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body px-0 px-md-2" style="overflow-x: auto;">
+                        <table class="table">
+                            
+                            <tbody>
+                                <tr class="font-weight-bold">
+                                    <td scope="col">Product</td>
+                                    <td scope="col">Price</td>
+                                    <td scope="col">Quantity</td>
+                                    <td scope="col">Total</td>
+                                    <td scope="col">Received</td>
+                                </tr>
+                                {% for order_item in order.order_items.all %}
+                                <tr>
+
+                                    <td>
+                                        <div class="media">
+                                            <div class="d-flex">
+                                                <img class="img-thumbnail" src="{{ order_item.product.image.url }}"
+                                                    style="width:70px;height:70px; min-width: 50px; max-width: 90px; min-height: 50px; max-height: 90px;"
+                                                    alt="">
+                                            </div>
+                                            <div class="media-body text-dark p-2">
+                                                <p>{{ order_item.product.name }}</p>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <p class="m-0">GH&#8373;{{ order_item.single_item_price }}</p>
+                                    </td>
+                                    <td>
+                                        <div class="product_count">
+                                            {{ order_item.quantity }}
+
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <p class="m-0" id="total_price-{{ order_item.id }}">GH&#8373;{{ order_item.get_total_price }}
+                                        </p>
+                                    </td>
+                                    <td>
+                                        {% if not order_item.received %}
+                                        <a href="{{ order_item.get_mark_as_received_url }}"
+                                            class="btn btn-primary btn-sm">Mark as Received</a>
+                                        {% else %}
+                                        <span class="text-warning">Completed</span>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                {% endfor %}
+
+
+
+                            </tbody>
+                        </table>
+
+                    </div>
+                    <div class="bg-main p-3 ">
+                        <div class="container-fluid">
+
+                            <div class="row">
+                                <div class="col">
+                                    <h5>&gt; Street Name</h5>
+                                    <p class="border pl-3 py-2  border-2 border-top-0 border-right-0 border-bottom-0">
+                                        {{ order.address.street_name }}
+                                    </p>
+                                </div>
+                                <div class="col">
+                                    <h5>&gt; House Number</h5>
+                                    <p class="border pl-3 py-2  border-2 border-top-0 border-right-0 border-bottom-0">
+                                        {{ order.address.house_number }}
+                                    </p>
+                                </div>
+                                <div class="col">
+                                    <h5>&gt; Phone Number</h5>
+                                    <p class="border pl-3 py-2  border-2 border-top-0 border-right-0 border-bottom-0">
+                                        {{ order.address.phone_number }}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+
+                <div>
+                    <span class="ml-auto"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!--================End Cart Area =================-->
+
+
+
+
+{% endblock content %}
