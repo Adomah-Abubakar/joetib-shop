@@ -1,0 +1,89 @@
+{% extends "_base.html" %}
+
+{% block title %}Cart{% endblock %}
+
+
+
+{% block content %}
+
+<!--================Cart Area =================-->
+<section class="cart_area">
+    <div class="container-fluid">
+
+        <div class="container">
+            <h1 class="pt-4">Order Summary #{{ order.id }}</h1>
+            <div class="col-5 pb-4">
+                <hr>
+            </div>
+            <div class="py-3">
+                <div class="pb-5" style="overflow-x: auto;">
+                    <table class="table table-striped">
+                        <thead class="font-weight-bold">
+                            <tr>
+                                <td>#</td>
+                                <td>Image</td>
+                                <td>Name</td>
+                                <td>Price</td>
+                                <td>Quantity</td>
+                                <td>Total Price</td>
+                                <td></td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for order_item in order.order_items.all %}
+                            <tr id="order-item-{{ order_item.pk}}">
+                                <td>{{ forloop.counter }}</td>
+                                <td><img class="img-thumbnail img-responsive"
+                                        style="width: 80px; height: 80px; object-fit: cover;"
+                                        src="{{ order_item.product.image.url }}"><img></td>
+                                <td>
+                                    <a href="{{ order_item.product.get_absolute_url }}">
+                                        <h6>{{ order_item.product.name }}</h6>
+                                        <p class="text-muted">{{ order_item.product.description | truncatewords:10 }}
+                                        </p>
+                                    </a>
+
+                                </td>
+                                <td>
+                                    {% if order_item.product.discount_price %}
+                                    <p class="product-card-price font-weight-normal">
+                                        GH&#8373;{{ order_item.product.discount_price }}
+                                    </p>
+                                    <p class="product-card-discount-price d-block">
+                                        GH&#8373;{{ order_item.product.price }}
+                                    </p>
+                                    {% else %}
+                                    <p class="product-card-price font-weight-normal">
+                                        GH&#8373;{{ order_item.product.price }}</p>
+                                    {% endif %}
+                                </td>
+                                <td class="d-flex align-items-center justify-content-center">
+                                    {{ order_item.quantity }}
+                                </td>
+                                <td>
+                                    GH&#8373;{{ order_item.get_total_price }}
+                                </td>
+                                <td>
+                                    <a class="btn btn-sm btn-accent text-white-fixed"
+                                        href="{{ order_item.get_absolute_url }}">Details</a>
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="5" class="text-center">There are no items in your cart.</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!--================End Cart Area =================-->
+
+
+
+
+{% endblock content %}

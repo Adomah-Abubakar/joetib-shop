@@ -1,0 +1,94 @@
+{% extends '_base.html' %}
+
+
+{% block content %}
+<div class="container py-3">
+    <div class="row">
+        <div class="col-sm-6 pt-4 px-1 px-md-2 col-lg-6">
+
+            <div class="product-detail-image">
+
+                <img class="img-fluid" src="{{ order_item.product.image.url }}">
+            </div>
+
+
+        </div>
+        <div class="col-sm-6 px-1 px-md-2 pt-4  col-lg-6">
+            <div class="bg-white">
+
+                <div class=" shado p-3">
+                    Product Information
+                </div>
+
+                <div class=" container  pb-2">
+                    <h2>{{ order_item.product.name }}</h2>
+                    <div class="pt-3 text-accent">
+                        <h4 class="product-card-price">GH&#8373;{{ order_item.get_total_price }}</h4>
+                    </div>
+                    <table class="table table-striped mt-4">
+                        <tbody>
+                            <tr class="bg-primary text-white">
+
+                                <td>Completed</td>
+                                <td>
+                                    {% if  order_item.is_complete %}
+                                    <i class="fa fa-check" aria-hidden="true"></i> Yes
+                                    {% else %}
+                                    <i class="fa fa-times-circle" aria-hidden="true"></i> No
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            <tr>
+
+                                <td>Quantity</td>
+                                <td>{{ order_item.quantity }}</td>
+                            </tr>
+                            <tr>
+
+                                <td>Item Price</td>
+                                <td>{{ order_item.get_single_item_price }}</td>
+                            </tr>
+                            <tr>
+
+                                <td>Total</td>
+                                <td>{{ order_item.get_total_price }}</td>
+                            </tr>
+                            
+                        </tbody>
+                    </table>
+
+
+                </div>
+            </div>
+
+        </div>
+        <div class="col-12 py-5">
+            <div class="py-4 bg-white">
+                <div class="container">
+                    <p class="pb-1 text-accent">Description</p>
+
+                    {{ order_item.product.description }}
+                </div>
+            </div>
+            <div class="py-4">
+                <a href="{{ order_item.product.get_absolute_url }}" class="btn btn-primary">Go to Product Page</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script async>
+    function updateQuantity(number) {
+        quantity = document.getElementById("quantity_input");
+        quantity.value = parseInt(quantity.value) + number;
+        if (quantity.value < 1) {
+            quantity.value = 1
+        }
+
+    }
+    document.getElementById("decrease_quantity").addEventListener("click", () => updateQuantity(-1));
+    document.getElementById("increase_quantity").addEventListener("click", () => updateQuantity(1));
+</script>
+{% endblock %}

@@ -5,12 +5,19 @@
 <div class="container py-3">
     <div class="row">
         <!-- Start Desktop Category filter -->
-        <div class="col-sm-4 pt-4 px-0 px-sm-2 col-lg-3">
+        <div class="col-sm-4 col-md-4 d-none d-md-block pt-4 px-0 px-sm-2 col-lg-3">
             <div class="shadow- bg-white">
                 <div class="p-3 text-white-fixed bg-primary">
                     Categories
                 </div>
                 <div class="container">
+                    <a href="{% url 'shop:product-list' %}">
+                        <div
+                            class="py-3 d-flex justify-content-between align-items-center border border-top-0 border-left-0 border-right-0">
+                            <span>All </span>
+                            <span class="ml-auto">({{ all_products_count }})</span>
+                        </div>
+                    </a>
                     {% for category in categories %}
                     <a href="{{ category.get_absolute_url }}">
                         <div
@@ -31,10 +38,10 @@
 
         <!-- End Desktop Category Filter -->
         <!-- Start mobile category filter -->
-        <div class="col-12 d-block d-md-none">
+        <div class="col-12 d-block d-md-none ">
             <p>
 
-                <button class="btn w-100 my-3 py-3 btn-primary" type="button" data-toggle="collapse"
+                <button class="btn w-100 my-3 mx-0  py-3 btn-primary" type="button" data-toggle="collapse"
                     data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
                     Filters
                 </button>
@@ -42,67 +49,35 @@
             <div class="collapse" id="collapseExample">
                 <!-- Filters -->
                 <div class="sidebar-categories">
-                    <div class="head">Browse Categories</div>
-                    <ul class="main-categories">
-
-                        <li class="main-nav-list">
-                            <a class="{% if category == current_category %} text-primary{% endif %}"
-                                href="{% url 'shop:product-list' %}">
-                                All
-                                <span class="number">
-                                    ({{ total_products_count }})
-                                </span>
-                            </a>
-                        </li>
-                        {% for category in categories %}
-                        <li class="main-nav-list">
-                            <a class="{% if category == current_category %} text-primary{% endif %}"
-                                href="{{ category.get_absolute_url }}">
-                                {{ category.name }}
-                                <span class="number">
-                                    ({{ category.items_count }})
-                                </span>
-                            </a>
-                        </li>
-                        {% endfor %}
-                        </li>
-                    </ul>
-                </div>
-                <div class="sidebar-categories">
-                    <div class="common-filte">
-                        <div class=" pt-4 ">
-                            <div class="head">Price</div>
+                    <div class="shadow- bg-white">
+                        <div class="p-3 text-white-fixed bg-primary">
+                            Categories
                         </div>
-                        <div class="price-range-area main-categories py-4">
-                            <div id="price-range"></div>
-                            <div class="value-wrapper d-flex">
-                                <div class="price">Price:</div>
-                                <span>GH&#8373;</span>
-                                <div id="lower-value"></div>
-                                <div class="to">to</div>
-                                <span>GH&#8373;</span>
-                                <div id="upper-value"></div>
+                        <div class="container">
+                            <a href="{% url 'shop:product-list' %}">
+                                <div
+                                    class="py-3 d-flex justify-content-between align-items-center border border-top-0 border-left-0 border-right-0">
+                                    <span>All </span>
+                                    <span class="ml-auto">({{ all_products_count }})</span>
+                                </div>
+                            </a>
+                            {% for category in categories %}
+                            <a href="{{ category.get_absolute_url }}">
+                                <div
+                                    class="py-3 d-flex justify-content-between align-items-center border border-top-0 border-left-0 border-right-0">
+                                    <span>{{ category }} </span>
+                                    <span class="ml-auto">({{ category.get_products_count }})</span>
+                                </div>
+                            </a>
+                            {% empty %}
+                            <div class="text-danger">
+                                Sorry there are no categories
                             </div>
-                            <span href="#" class="btn btn-outline-success" onclick="
-                        var min_price = document.getElementById('lower-value').innerText;
-                        var max_price = document.getElementById('upper-value').innerText;
-                        var url_list = window.location.href.split('?');
-                        var url = url_list[0] + '?'
-                        console.log(url_list);
-                        if (url_list.length > 1){
-                            var queries = url_list[1];
-                            queries.split('&').forEach(function(i){
-                                if (i.length!==0 && !i.startsWith('min_price') && !i.startsWith('max_price')){
-                                   url += i + '&'
-                                }
-                            }); 
-                        }
-                        url += 'min_price='+min_price +'&max_price='+ max_price;
-                        window.location.replace(url);
-                        return False;">Apply Filter</span>
+                            {% endfor %}
                         </div>
                     </div>
                 </div>
+                
 
                 <!-- End filters -->
             </div>
@@ -110,7 +85,7 @@
 
         </div>
         <!-- End mobile category filter -->
-        <div class="col-sm-8 px-0 px-sm-2 pt-4  col-lg-9">
+        <div class="col-sm-12 col-md-8 px-0 px-sm-2 pt-4  col-lg-9">
             <div class=" shadow- bg-primary text-white-fixed p-3">
                 <a href="{% url 'shop:product-list' %}">Products</a>
                 {% if current_category %} / <a href="{% url 'shop:product-list' %}"> {{ current_category }}</a>{% endif %}

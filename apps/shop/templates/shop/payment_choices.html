@@ -68,6 +68,37 @@
             </div>
         </div>
     </div>
+    <div class="col-12 py-5">
+        <div class="p-4 mb-5 bg-white text-dark " >
+            <h4>Selected Address</h4>
+            <div class="py-2 " style="overflow-x: auto;">
+                <table class="table table-striped">
+                    <thead  class="font-weight-bold">
+                        <tr>
+                            <td>#</td>
+                            <td>Street Name</td>
+                            <td>House Number</td>
+                            <td>Phone Number</td>
+                            <td>Extra Description</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        <tr>
+                            <td></td>
+                            <td>{{ order.address.street_name }}</td>
+                            <td>{{ order.address.house_number }}</td>
+                            <td>{{ order.address.phone_number }}</td>
+                            <td>{{ order.address.extra_description }}</td>
+                            
+                        </tr>
+                    </tbody>
+
+
+                </table>
+            </div>
+        </div>
+    </div>
 </div>
 </div>
 {% endblock content %}

@@ -161,8 +161,9 @@ class Order(models.Model):
     user = models.ForeignKey(User, related_name="orders", on_delete=models.SET_NULL, null=True, blank=True)
     amount = models.DecimalField(max_digits=12, decimal_places=2, blank=True, null=True)
     address = models.ForeignKey(Address, related_name="orders", on_delete=models.SET_NULL, null=True, blank=True)
-    payment_method = models.CharField(choices=PaymentChoices.choices, blank=True, max_length=2)
+    payment_method = models.CharField(choices=PaymentChoices.choices,default=PaymentChoices.cash, blank=True, max_length=2)
     is_completed=models.BooleanField(default=False)
+    ordered = models.BooleanField(default=False)
     ordered_date = models.DateTimeField(blank=True, null=True)
     date_created = models.DateTimeField(auto_now_add=True)
     last_modified = models.DateTimeField(auto_now=True)
@@ -170,6 +171,9 @@ class Order(models.Model):
     def __str__(self):
         return f"Order for {self.amount} on {self.date_created.day}"
 
+    def get_absolute_url(self) -> str:
+        return reverse("shop:order-detail", kwargs={'pk': self.pk})
+    
     def place_order(self) -> bool:
         order_items = []
         for order_item in self.order_items.all():
@@ -178,8 +182,11 @@ class Order(models.Model):
         OrderItem.objects.bulk_update(order_items, fields=['single_item_price'])
         self.amount = sum([order_item.get_total_price() for order_item in order_items])
         self.ordered_date = timezone.now()
-        self.is_completed = True
+        self.ordered = True
         self.save()
+    
+    def get_number_of_items(self) -> int:
+        return sum([order_item.quantity for order_item in self.order_items.all()])
 
 
 class OrderItem(models.Model):
@@ -188,6 +195,8 @@ class OrderItem(models.Model):
     quantity = models.PositiveIntegerField(default=1)
     single_item_price = models.DecimalField(decimal_places=2, max_digits=12, null=True, blank=True)
 
+    def get_absolute_url(self) -> str:
+        return reverse('shop:order-item-detail', kwargs={'order_id': self.order.id, 'pk': self.pk})
     def get_total_sold_price(self) -> Decimal:
         return self.quantity * self.get_single_item_price()
     

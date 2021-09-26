@@ -117,7 +117,7 @@ textarea.form-control {
   height: 100px;
 }
 .products-grid {
-  padding: 2rem 0.2rem;
+  padding: 1.2rem 0.2rem;
   display: grid;
   grid-template-columns: repeat(auto-fill , minmax(150px, 1fr) );
   grid-template-rows: auto;

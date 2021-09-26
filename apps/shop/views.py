@@ -43,6 +43,7 @@ class ProductListView(ListView):
         context = super().get_context_data(*args, **kwargs)
         context['categories'] = Category.objects.all()
         context['current_category'] = self.current_category
+        context['all_products_count'] = Product.objects.all().count()
         return context
 
 class ProductDetailView(DetailView):
@@ -58,21 +59,22 @@ class ProductDetailView(DetailView):
 @login_required
 def add_product_to_order(request: HttpRequest, product_pk:int) -> HttpResponse:
     
-    order = Order.objects.get_or_create(is_completed=False,user=request.user)[0]
-    product = get_object_or_404(Product, pk=product_pk)
+    order: Order = Order.objects.get_or_create(ordered=False,user=request.user)[0]
+    quantity: int = int(request.GET.get('quantity', 1))
+    product: Product = get_object_or_404(Product, pk=product_pk)
     order_item_qs = OrderItem.objects.filter(order=order, product=product)
     if order_item_qs.exists():
         order_item: OrderItem = order_item_qs.first()
-        order_item.quantity += 1
+        order_item.quantity += quantity
         order_item.save()
     else:
-        order_item: OrderItem = OrderItem.objects.create(order=order, product=product)
-    messages.success(request, f"Product '{ product.name }' has been added to cart.")
+        order_item: OrderItem = OrderItem.objects.create(order=order, product=product, quantity=quantity)
+    messages.success(request, f"Product '{product.name}' has been added to cart.")
     return redirect('shop:cart')
 
 def add_product_to_cart_json(request: HttpRequest, product_pk: int):
     quantity = int(request.GET.get('quantity', 1))
-    order = Order.objects.get_or_create(is_completed=False,user=request.user)[0]
+    order = Order.objects.get_or_create(ordered=False,user=request.user)[0]
     product = get_object_or_404(Product, pk=product_pk)
     order_item_qs = OrderItem.objects.filter(order=order, product=product)
     if order_item_qs.exists():
@@ -92,7 +94,7 @@ def add_product_to_cart_json(request: HttpRequest, product_pk: int):
     
 @login_required
 def cart_view(request: HttpRequest):
-    order, _ = Order.objects.get_or_create(is_completed=False, user=request.user)
+    order, _ = Order.objects.get_or_create(ordered=False, user=request.user)
     return render(request, "shop/cart.html", {'order': order})
 
 
@@ -100,7 +102,7 @@ class CheckOut(View,LoginRequiredMixin):
     def get(self, request: HttpRequest, *args, **kwargs):
         if self.kwargs.get('address_pk'):
             return self.post(request, *args, **kwargs)
-        order, _ = Order.objects.get_or_create(is_completed=False,user=request.user)
+        order, _ = Order.objects.get_or_create(ordered=False,user=request.user)
         if order.order_items.count() < 1:
             messages.error(request, "Sorry you do not have any items in your order.")
             return redirect("shop:product-list")
@@ -108,7 +110,7 @@ class CheckOut(View,LoginRequiredMixin):
         return render(request, 'shop/checkout.html', {'address_form': address_form, 'order': order})
     
     def post(self, request: HttpRequest, *args, **kwargs):
-        order, _ = Order.objects.get_or_create(is_completed=False,user=request.user)
+        order, _ = Order.objects.get_or_create(ordered=False,user=request.user)
         if order.order_items.count() < 1:
             messages.error(request, "Sorry you do not have any items in your order.")
             return redirect("shop:product-list")
@@ -133,7 +135,7 @@ class CheckOut(View,LoginRequiredMixin):
 
 class PaymentChoice(View):
     def get(self, request, *args, **kwargs):
-        order, _ = Order.objects.get_or_create(is_completed=False,user=request.user)
+        order, _ = Order.objects.get_or_create(ordered=False,user=request.user)
         if order.order_items.count() < 1:
             messages.error(request, "Sorry you do not have any items in your order.")
             return redirect("shop:product-list")
@@ -142,7 +144,7 @@ class PaymentChoice(View):
     
     def post(self, request, *args, **kwargs):
         order: Order
-        order, _ = Order.objects.get_or_create(is_completed=False,user=request.user)
+        order, _ = Order.objects.get_or_create(ordered=False,user=request.user)
         if order.order_items.count() < 1:
             messages.error(request, "Sorry you do not have any items in your order.")
             return redirect("shop:product-list")
@@ -160,10 +162,26 @@ class PaymentChoice(View):
 class OrderList(ListView):
     model = Order
     context_object_name = "orders"
+    paginate_by = 12
     template_name = "shop/order_list.html"
 
     def get_queryset(self):
-        return  Order.objects.filter(user=self.request.user, is_completed=True)
+        return  Order.objects.filter(user=self.request.user, ordered=True).order_by("is_completed")
     
 
-                
+class OrderDetail(DetailView):
+    model = Order
+    context_object_name = "order"
+    template_name = "shop/order_detail.html"
+    
+    def get_queryset(self):
+        return  Order.objects.filter(user=self.request.user, ordered=True)
+    
+
+class OrderItemDetail(DetailView):
+    model = OrderItem
+    context_object_name = "order_item"
+    template_name = "shop/order_item_detail.html"
+
+    def get_queryset(self):
+        return OrderItem.objects.filter(order__user=self.request.user, order__ordered=True)

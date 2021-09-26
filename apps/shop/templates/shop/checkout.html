@@ -10,7 +10,7 @@
                 <h4>Choose Address</h4>
                 <div class="py-2 " style="overflow-x: auto;">
                     <table class="table table-striped">
-                        <thead>
+                        <thead  class="font-weight-bold">
                             <tr>
                                 <td>#</td>
                                 <td>Street Name</td>
@@ -51,7 +51,7 @@
                 </div>
             </form>
         </div>
-        <div class="col-lg-4">
+        <div class="col-lg-4 pt-5 pt-md-0">
             <div class="bg-white p-4 text-dark">
                 <h4>Cart</h4>
                 <div class="py-2">
@@ -72,15 +72,15 @@
                                 </td>
                                 <td>
                                     {% if order_item.product.discount_price %}
-                                    <p class="product-card-price text-md">
+                                    <p class="product-card-price font-weight-normal text-md">
                                         GH&#8373;{{ order_item.product.discount_price }}</p>
                                     <p class="product-card-discount-price d-block">
                                         GH&#8373;{{ order_item.product.price }}</p>
                                     {% else %}
-                                    <p class="product-card-price text-md">GH&#8373;{{ order_item.product.price }}</p>
+                                    <p class="product-card-price font-weight-normal text-md">GH&#8373;{{ order_item.product.price }}</p>
                                     {% endif %}
                                 </td>
-                                <td class="d-flex align-items-center justify-content-center tex-md">
+                                <td class="d-flex align-items-center justify-content-center text-md">
                                     {{ order_item.quantity }}
                                 </td>
                                 <td class="text-md">

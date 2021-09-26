@@ -30,7 +30,14 @@
                 </div>
                 <hr>
                 <div>
-                    <a class="btn btn-xl custom-btn-primary text-white-fixed" href="{{ product.get_add_to_cart_url }}">Add to Cart</a>
+                    <form action="{{ product.get_add_to_cart_url }}" method="GET">
+                       <div class=" form-inline">
+                           <button class="form-control" id="decrease_quantity" type="button"><i class="fa fa-angle-left"></i></button>
+                           <input name="quantity" id="quantity_input" class="form-control text-center" style="width: 70px;" min="1" max="100" type="number" value="1">
+                           <button class="form-control" id="increase_quantity"  type="button"><i class="fa fa-angle-right"></i></button>
+                           <button type="submit" class="btn btn-xl form-control custom-btn-primary text-white-fixed">Add to Cart</a>
+                        </div> 
+                    </form>
                 </div>
                 <div class="py-4">
                     {{ product.description }}
@@ -41,4 +48,19 @@
         </div>
     </div>
 </div>
+{% endblock %}
+
+{% block extra_js %}
+<script async>
+    function updateQuantity(number){
+        quantity = document.getElementById("quantity_input");
+        quantity.value = parseInt(quantity.value) + number;
+        if (quantity.value < 1){
+            quantity.value = 1
+        }
+
+    }
+    document.getElementById("decrease_quantity").addEventListener("click", ()=>updateQuantity(-1));
+    document.getElementById("increase_quantity").addEventListener("click", ()=>updateQuantity(1));
+</script>
 {% endblock %}
