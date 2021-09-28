@@ -173,7 +173,7 @@ class Order(models.Model):
     last_modified = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f"Order for {self.amount} on {self.date_created.day}"
+        return f"Order #{self.pk} on {self.date_created.day}"
     
     def get_payment_url(self) -> str:
         return reverse('shop:momo-payment', kwargs={'pk': self.pk})
@@ -303,7 +303,7 @@ class Payment(models.Model):
         status, result = paystack.verify_payment(self.ref_code, self.amount)
         print(status, result)
         if status:
-            self.paystack_response = result
+            self.paystack_response = str(result)
             self.amount = result['amount'] / 100
             self.paid = True
             self.save()
