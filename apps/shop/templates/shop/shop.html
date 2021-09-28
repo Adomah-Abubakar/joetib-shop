@@ -90,8 +90,8 @@
         <div class="col-sm-12 col-md-8 px-0 px-sm-2 pt-4  col-lg-9">
             <div class=" shadow- bg-primary text-white-fixed p-3">
                 <a href="{% url 'shop:product-list' %}">Products</a>
-                {% if current_category %} / <a href="{% url 'shop:product-list' %}"> {{ current_category }}</a>{% endif
-                %}
+                {% if current_category %} / <a href="{% url 'shop:product-list' %}"> {{ current_category }}</a>
+                {% endif %}
             </div>
             <div class="products-grid shadow- b-white">
                 {% for product in products %}
