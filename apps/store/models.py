@@ -268,7 +268,7 @@ class Payment(models.Model):
     ref_code = models.CharField(max_length=300, blank=True, null=True)
     amount = models.DecimalField(decimal_places=2, max_digits=12, blank=True, null=True)
     paid = models.BooleanField(default=False)
-    paystack_response = models.JSONField(blank=True, null=True)
+    paystack_response = models.TextField(blank=True, null=True)
 
     def __str__(self) ->str:
         return f"Payment of GH {self.amount} for {self.order}"
