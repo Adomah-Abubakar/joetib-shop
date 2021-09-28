@@ -101,6 +101,7 @@ TEMPLATES = [
 # DATABASES
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#databases
+
 if DEBUG:
     DATABASES = {
         "default": {
