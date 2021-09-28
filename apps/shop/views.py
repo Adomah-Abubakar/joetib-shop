@@ -202,6 +202,8 @@ class MomoPayment(LoginRequiredMixin, View):
             messages.error(request, "Sorry you do not have any items in your order.")
             return redirect("shop:product-list")
         payment_qs = order.payments.filter(paid=False, payment_type=Payment.PaymentChoices.momo)
+        if order.compute_amount_to_pay <= 0:
+            return redirect(order.get_absolute_url())
         if payment_qs.exists():
             payment = payment_qs.first()
             payment.amount = order.compute_amount_to_pay()
