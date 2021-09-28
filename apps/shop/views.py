@@ -19,11 +19,19 @@ from apps.store.forms import AddressForm
 from . import cookie_store
 
 
-class HomePage(View):
-    def get(self, request):
+class HomePage(ListView):
+    model = Product
+    paginate_by = 12
+    context_object_name = "products"
+    template_name = "shop/homepage.html"
+    current_category = None
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data()
         categories = Category.objects.all()
-        context = {"categories": categories, "products": Product.objects.all()[:20]}
-        return render(request, "shop/homepage.html", context)
+        context["categories"] = categories
+        context["all_products_count"] = Product.objects.all().count()
+
+        return context
 
 
 class ProductListView(ListView):
