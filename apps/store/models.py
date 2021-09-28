@@ -119,7 +119,7 @@ class Stock(models.Model):
     def is_profitable(self) -> bool:
         return self.get_estimated_profit() > 0
 
-    def check_if_item_missing(self) -> tuple[bool, int]:
+    def check_if_item_missing(self) -> Tuple[bool, int]:
         """Checks if all items are accounted for in a stock."""
         quantity_sold = sum([purchase.quantity for purchase in self.purchases.all()])
         real_available_quantity =  self.stock_quantity - quantity_sold
