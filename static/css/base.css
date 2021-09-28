@@ -197,6 +197,30 @@ a, a:hover {
   border-top: 2px solid #444;
   
 }
+.overflow-x-auto{
+  overflow-x: auto;
+  scrollbar-width: thin;
+}
+
+
+.overflow-x-auto::-webkit-scrollbar {
+  height: 5px;
+}
+
+/* Track */
+.overflow-x-auto::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+/* Handle */
+.overflow-x-auto::-webkit-scrollbar-thumb {
+  background: #ccc;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #777;
+}
 @media only screen and (max-width: 567px){
   /* For mobile devices */
   

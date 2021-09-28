@@ -1,4 +1,7 @@
+from apps.store.utils import get_random_string
+from apps.store.paystack import PayStack
 import decimal
+from typing import Tuple
 from django.db import models
 from django.db.models.fields import related
 from django.urls import reverse
@@ -165,15 +168,30 @@ class Order(models.Model):
     is_completed=models.BooleanField(default=False)
     ordered = models.BooleanField(default=False)
     ordered_date = models.DateTimeField(blank=True, null=True)
+    paid = models.BooleanField(default=False)
     date_created = models.DateTimeField(auto_now_add=True)
     last_modified = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return f"Order for {self.amount} on {self.date_created.day}"
-
+    
+    def get_payment_url(self) -> str:
+        return reverse('shop:momo-payment', kwargs={'pk': self.pk})
     def get_absolute_url(self) -> str:
         return reverse("shop:order-detail", kwargs={'pk': self.pk})
+
+    def get_confirmed_payments(self):
+        return self.payments.filter(paid=True)
     
+    def get_confirmed_amount_paid(self):
+        return sum([payment.amount for payment in self.get_confirmed_payments()])
+
+    def compute_total_amount(self):
+        return sum([order_item.get_total_price() for order_item in self.order_items.all()])
+
+    def compute_amount_to_pay(self):
+        return self.compute_total_amount() - self.get_confirmed_amount_paid()
+
     def place_order(self) -> bool:
         order_items = []
         for order_item in self.order_items.all():
@@ -181,8 +199,18 @@ class Order(models.Model):
             order_items.append(order_item)
         OrderItem.objects.bulk_update(order_items, fields=['single_item_price'])
         self.amount = sum([order_item.get_total_price() for order_item in order_items])
-        self.ordered_date = timezone.now()
-        self.ordered = True
+        if self.payment_method == self.PaymentChoices.cash:
+            self.ordered_date = timezone.now()
+            self.ordered = True
+        else:
+            amount_paid = self.get_confirmed_amount_paid()
+            if amount_paid:
+                self.ordered = True
+                if amount_paid >= self.amount:
+                    self.paid = True
+                    print("Marking as paid.")
+                else:
+                    print("Could not mark as paid", self.amount, amount_paid, amount_paid>=self.amount)
         self.save()
     
     def get_number_of_items(self) -> int:
@@ -230,3 +258,60 @@ class ProductPurchase(models.Model):
     
     def get_total_profit_made(self) -> Decimal:
         return self.get_total_sold_price() - self.get_total_cost_price()
+
+class Payment(models.Model):
+    class PaymentChoices(models.TextChoices):
+        cash = 'C'
+        momo = "M"
+    order = models.ForeignKey(Order, related_name="payments", on_delete=models.SET_NULL, null=True)
+    payment_type = models.CharField(max_length=1, choices=PaymentChoices.choices)
+    ref_code = models.CharField(max_length=300, blank=True, null=True)
+    amount = models.DecimalField(decimal_places=2, max_digits=12, blank=True, null=True)
+    paid = models.BooleanField(default=False)
+    paystack_response = models.JSONField(blank=True, null=True)
+
+    def __str__(self) ->str:
+        return f"Payment of GH {self.amount} for {self.order}"
+
+    def save(self, *args, **kwargs):
+        self.generate_ref_code()
+        super().save(*args, **kwargs)
+        
+    def amount_value(self) -> str:
+        return self.amount * 100
+
+    def generate_ref_code(self): 
+        while not self.ref_code:
+            ref_code = get_random_string()
+            if not Payment.objects.filter(ref_code=ref_code).exists():
+                self.ref_code = ref_code
+        
+    
+
+    def get_confirm_url(self) -> str:
+        return reverse('shop:confirm-momo-payment', kwargs={'pk': self.pk})
+
+    def confirm_payment(self) -> Tuple[bool, str]:
+        if not (self.payment_type and self.amount):
+            return False, "Payment cannot be processed without both a payment_type and amount"
+        if self.payment_type == self.PaymentChoices.cash:
+            return self.confirm_cash_payment()
+        return self.confirm_momo_payment()
+
+    def confirm_momo_payment(self) -> Tuple[bool, str]:
+        paystack = PayStack()
+        status, result = paystack.verify_payment(self.ref_code, self.amount)
+        print(status, result)
+        if status:
+            self.paystack_response = result
+            self.amount = result['amount'] / 100
+            self.paid = True
+            self.save()
+            return True, f"Payment of {self.amount} received for Order {self.order}"
+        return False, "Payment Could not be confirmed."
+        
+
+    def confirm_cash_payment(self)-> Tuple[bool, str]:
+        self.paid = True
+        self.save()
+        return True, "Payment proccessed successfully."
