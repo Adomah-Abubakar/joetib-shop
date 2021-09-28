@@ -203,6 +203,7 @@ class Order(models.Model):
             self.ordered_date = timezone.now()
             self.ordered = True
         else:
+            self.ordered_date = timezone.now()
             amount_paid = self.get_confirmed_amount_paid()
             if amount_paid:
                 self.ordered = True
