@@ -90,8 +90,8 @@ body.dark-mode {
 /* End colors */
 body {
   background: var(--main-background);
-  font-family: 'Open Sans', sans-serif;
-  font-size: 0.9em;
+  /* font-family: 'Open Sans', sans-serif;
+  font-size: 0.9em; */
   color: var(--dark-color);
 }
 
