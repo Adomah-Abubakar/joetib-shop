@@ -275,6 +275,11 @@ a, a:hover {
   height: 350px;
 }
 
+@media screen and (max-width: 567px) {
+  .banner-slide-300 {
+    height: 30vh;
+  }
+}
 .h-250{
   height: 250px;
 }
