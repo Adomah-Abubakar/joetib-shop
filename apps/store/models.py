@@ -28,6 +28,9 @@ class Category(models.Model):
     
     def get_products_count(self) -> int:
         return self.products.count()
+    
+    def get_active_banners(self):
+        return self.banners.filter(is_active=True)
 
 class Product(models.Model):
     name = models.CharField(max_length=100)
@@ -316,3 +319,20 @@ class Payment(models.Model):
         self.paid = True
         self.save()
         return True, "Payment proccessed successfully."
+    
+
+class Banner(models.Model):
+    category = models.ForeignKey(Category, related_name="banners", blank=True, null=True, on_delete=models.CASCADE)
+    image = models.ImageField(upload_to="banners/")
+    title = models.CharField(max_length=100, blank=True)
+    sub_title = models.CharField(max_length=250, blank=True)
+    url = models.URLField()
+    is_active = models.BooleanField(default=True)
+    
+    def has_content(self):
+        return any([self.title, self.sub_title, self.url])
+    
+    def get_url(self):
+        if self.url:
+            return self.url
+        return self.category.get_absolute_url()

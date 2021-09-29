@@ -13,22 +13,23 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.conf import settings
 
 # Create your views here.
-from apps.store.models import Payment, Product, Category, Order, OrderItem, Address
+from apps.store.models import Banner, Payment, Product, Category, Order, OrderItem, Address
 from apps.store.forms import AddressForm
 
 from . import cookie_store
 
 
 class HomePage(ListView):
-    model = Product
-    paginate_by = 12
-    context_object_name = "products"
+    model = Category
+    context_object_name = "categories"
     template_name = "shop/homepage.html"
-    current_category = None
+    def get_queryset(self):
+        return Category.objects.all()[:7]
+
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data()
         categories = Category.objects.all()
-        context["categories"] = categories
+        context["banners"] = Banner.objects.filter(category=None)[:5]
         context["all_products_count"] = Product.objects.all().count()
 
         return context

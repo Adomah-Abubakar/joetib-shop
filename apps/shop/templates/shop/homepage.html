@@ -2,25 +2,23 @@
 
 
 {% block content %}
-<div class="container py-3">
-    <div class="row">
-        <!-- Start Desktop Category filter -->
-        <div class="col-sm-4 col-md-4 d-none d-md-block pt-4 px-0 px-sm-2 col-lg-3">
-            <div class="shadow- bg-white">
-                <div class="p-3 text-white-fixed bg-primary">
-                    Categories
-                </div>
+<div class="container py-3 ">
+    
+    <div class="row bg-white">
+        <div class="col-lg-4 col-xl-3 py-3">
+            <div class="shadow- bg-main h-100 d-flex justify-content-center flex-column">
+                
                 <div class="container">
                     <a href="{% url 'shop:product-list' %}">
                         <div
-                            class="py-3 d-flex justify-content-between align-items-center border border-top-0 border-left-0 border-right-0">
-                            <span>All </span>
+                            class="py-1 d-flex justify-content-between align-items-center border border-top-0 border-left-0 border-right-0">
+                            <span>Shop Now </span>
                             <span class="ml-auto">({{ all_products_count }})</span>
                         </div>
                     </a>
                     {% for category in categories %}
                     <a href="{{ category.get_absolute_url }}">
-                        <div class="py-3 d-flex justify-content-between align-items-center border border-top-0 border-left-0 border-right-0
+                        <div class="py-1 d-flex justify-content-between align-items-center 
                             {% if category == current_category %}text-primary bg-main px-1{% endif %}
                             ">
                             <span>{{ category }} </span>
@@ -34,82 +32,52 @@
                     {% endfor %}
                 </div>
             </div>
-
         </div>
-
-        <!-- End Desktop Category Filter -->
-        <!-- Start mobile category filter -->
-        <div class="col-12 d-block d-md-none ">
-            <p>
-
-                <button class="btn w-100 my-3 mx-0  py-3 btn-primary" type="button" data-toggle="collapse"
-                    data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
-                    Filters
-                </button>
-            </p>
-            <div class="collapse" id="collapseExample">
-                <!-- Filters -->
-                <div class="sidebar-categories">
-                    <div class="shadow- bg-white">
-                        <div class="p-3 text-white-fixed bg-primary">
-                            Categories
-                        </div>
-                        <div class="container">
-                            <a href="{% url 'shop:product-list' %}">
-                                <div
-                                    class="py-3 d-flex justify-content-between align-items-center border border-top-0 border-left-0 border-right-0">
-                                    <span>All </span>
-                                    <span class="ml-auto">({{ all_products_count }})</span>
-                                </div>
-                            </a>
-                            {% for category in categories %}
-                            <a href="{{ category.get_absolute_url }}">
-                                <div class="py-3 d-flex justify-content-between align-items-center border border-top-0 border-left-0 border-right-0 
-                                {% if category == current_category %}text-primary  bg-main px-1{% endif %}
-                                ">
-                                    <span>{{ category }} </span>
-                                    <span class="ml-auto">({{ category.get_products_count }})</span>
-                                </div>
-                            </a>
-                            {% empty %}
-                            <div class="text-danger">
-                                Sorry there are no categories
-                            </div>
-                            {% endfor %}
-                        </div>
-                    </div>
+        <div class="col-lg-8 col-xl-9 pl-0 py-3">
+            <div class="banner-slide-container">
+                {% for banner in banners %}
+                <div class="banner-slide  banner-slide-300">
+                    <img src="{{ banner.image.url }}" alt="banner image">
                 </div>
-
-
-                <!-- End filters -->
+                {% endfor %}
             </div>
-
-
         </div>
+    </div>
+</div>
+<div class="container py-3">
+    
+
+
+    <div class="row">
+        {% for category in categories %}
         <!-- End mobile category filter -->
-        <div class="col-sm-12 col-md-8 px-0 px-sm-2 pt-4  col-lg-9">
+        <div class="col-12 px-0 px-sm-2 pt-4 ">
             <div class=" shadow- bg-primary text-white-fixed p-3">
-                <a href="{% url 'shop:product-list' %}">Products</a>
-                {% if current_category %} / <a href="{% url 'shop:product-list' %}"> {{ current_category }}</a>
-                {% endif %}
+                <a href="{{ category.get_absolute_url }}"> {{ category }}</a>
+
+            </div>
+            <div class="banner-slide-container ">
+                {% for banner in category.get_active_banners|slice:2 %}
+                <div class="banner-slide">
+                    <img src="{{ banner.image.url }}">
+                </div>
+                {% endfor %}
             </div>
             <div class="products-grid shadow- b-white">
-                {% for product in products %}
+                {% for product in category.products.all %}
                 {% include 'shop/_partials/_product_card.html' %}
 
                 {% endfor %}
             </div>
-            {% if not products %}
+            {% if not category.products %}
             <div class="col-12 pb-4 bg-white text-center text-danger">
                 Sorry there are no products at the moment.
             </div>
             {% endif %}
-            <div class="bg-white  pb-2">
 
-                {% include "shop/_partials/_pagination.html" %}
-            </div>
 
         </div>
+        {% endfor %}
     </div>
 </div>
 {% endblock %}

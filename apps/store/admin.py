@@ -31,3 +31,7 @@ class OrderAdmin(admin.ModelAdmin):
 @admin.register(models.OrderItem)
 class OrderItemAdmin(admin.ModelAdmin):
     pass
+
+@admin.register(models.Banner)
+class BannerAdmin(admin.ModelAdmin):
+    list_display = ("image", "category", "title")
