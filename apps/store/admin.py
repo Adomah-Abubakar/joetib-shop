@@ -34,4 +34,4 @@ class OrderItemAdmin(admin.ModelAdmin):
 
 @admin.register(models.Banner)
 class BannerAdmin(admin.ModelAdmin):
-    list_display = ("image", "category", "title")
+    list_display = ("id", "image", "category", "title")
