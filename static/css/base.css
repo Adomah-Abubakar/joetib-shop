@@ -243,14 +243,16 @@ a, a:hover {
 
 body * {
   scrollbar-width: thin;
-
 }
+
 body *::-webkit-scrollbar {
   height: 5px;
 }
+
 body *::-webkit-scrollbar-track {
   background: #f1f1f1;
 }
+
 body *-auto::-webkit-scrollbar-track {
   background: #f1f1f1;
 }
@@ -326,9 +328,11 @@ body *::-webkit-scrollbar-thumb {
   min-width: calc(50% - 10px);
   border-radius: 10px;
 }
+
 .banner-slide:first-child:nth-last-child(1) {
   width: 100%;
 }
+
 .banner-slide img {
   height: 200px;
   width: 100%;
@@ -340,10 +344,25 @@ body *::-webkit-scrollbar-thumb {
   height: 350px;
 }
 
-@media screen and (max-width: 567px) {
-  .bg-xs-none{
-    background: none;
-    background-color: none;
+@media screen and (max-width:992px) {
+  /* Medium screen */
+  .bg-lg-none {
+    background: unset !important;
+  }
+}
+
+@media screen and (max-width:768px) {
+  /* Medium screen */
+  .bg-md-none {
+    background: unset !important;
+  }
+}
+
+@media screen and (max-width: 576px) {
+  /* sm small screen */
+  .bg-xs-none {
+    background: unset !important;
+    background-color: unset !important;
   }
   .banner-slide-300 img {
     height: 150px;
@@ -355,7 +374,6 @@ body *::-webkit-scrollbar-thumb {
     width: 90%;
     min-width: calc(90% - 10px);
   }
-  
   .banner-slide-container {
     grid-auto-flow: row;
     grid-auto-columns: unset;
