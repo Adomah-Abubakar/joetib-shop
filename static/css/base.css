@@ -250,10 +250,10 @@ body *::-webkit-scrollbar {
 }
 
 body *::-webkit-scrollbar-track {
-  background: #f1f1f1;
+  background: transparent;
 }
 
-body *-auto::-webkit-scrollbar-track {
+overflow-auto::-webkit-scrollbar-track {
   background: #f1f1f1;
 }
 
