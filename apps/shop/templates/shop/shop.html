@@ -4,6 +4,23 @@
 {% block content %}
 <div class="container py-3">
     <div class="row">
+        {% if search_query %}
+        <div class="col-12">
+            <div class="bg-white py-4">
+                <div class="container">
+                    <div class="row">
+                        <div class=" col-md-6 py-1 d-flex flex-column justify-content-center">
+
+                            <p class="m-0">Search results for : <span class="font-weight-bold">{{ search_query }}</span></p>
+                        </div>
+                        <div class="col-md-6 py-1 d-flex flex-column justify-content-center">
+                            {% include "shop/_partials/_search_form.html" %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
         <!-- Start Desktop Category filter -->
         <div class="col-sm-4 col-md-4 d-none d-md-block pt-4 px-0 px-sm-2 col-lg-3">
             <div class="shadow- bg-white">

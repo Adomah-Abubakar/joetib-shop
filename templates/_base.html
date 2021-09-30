@@ -47,6 +47,7 @@
               <li class="nav-item active">
                 <a class="nav-link" href="{% url 'shop:order-list' %}">Orders <span class="sr-only">(current)</span></a>
               </li>
+              
               {% if request.user.is_superuser %}
               <!-- <li class="nav-item active">
               <a class="nav-link" href="{% url 'store:supply-list' %}">Supplies<span
@@ -63,7 +64,9 @@
 
             </ul>
             <ul class="navbar-nav">
-              
+              <li class="nav-item">
+                {% include 'shop/_partials/_search_form.html' %}
+              </li>
               {% if request.user.is_authenticated %}
               <li class="nav-item active">
                 <a class="nav-link" href="{% url 'account_logout' %}">Log Out <span class="sr-only">(current)</span></a>

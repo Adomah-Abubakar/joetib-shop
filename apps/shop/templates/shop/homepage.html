@@ -33,7 +33,7 @@
             </div>
         </div>
         <div class="col-lg-8 col-xl-9 pl-0 py-3">
-            <div class="banner-slide-container px-1 px-md-2">
+            <div class="banner-slide-container  px-2">
                 {% for banner in banners %}
                 <div class="banner-slide  banner-slide-300">
                     <img src="{{ banner.image.url }}" alt="banner image">
@@ -59,7 +59,7 @@
             {% if banners %}
             <div class="banner-slide-container py-2 mx-0">
                 {% for banner in banners|slice:2 %}
-                <div class="banner-slide bg-white p-1 p-md-3 rounded">
+                <div class="banner-slide bg-white p-2  p-md-3 rounded">
                     <img src="{{ banner.image.url }}">
                 </div>
                 {% endfor %}

@@ -14,7 +14,8 @@ html {
 :root{
   --primary-color: #03a099;
   --accent-color: #c18700;
-  --main-background: #fafaff;
+  /* --main-background: #fafaff; */
+   --main-background: #d0faf8;
   --white-color: white;
   --light-color: #aaa;
   --dark-color: #444;
@@ -263,6 +264,7 @@ a, a:hover {
   grid-auto-columns: minmax(49.5%, 1fr);
   grid-template-rows: 1fr;
   gap: 1%;
+  overflow: hidden;
 }
 
 .banner-slide img{
@@ -279,6 +281,12 @@ a, a:hover {
 @media screen and (max-width: 567px) {
   .banner-slide-300 {
     height: 30vh;
+  }
+  .banner-slide-container{
+    grid-auto-flow: row;
+    grid-auto-columns: unset;
+    grid-template-rows: repeat(1fr, 2);
+    gap: 10px;
   }
 }
 .h-250{

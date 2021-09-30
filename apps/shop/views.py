@@ -41,10 +41,14 @@ class ProductListView(ListView):
     context_object_name = "products"
     template_name = "shop/shop.html"
     current_category = None
+    search_query = None
 
     def get_queryset(self, *args, **kwargs):
         category_pk = self.kwargs.get("category_pk")
         queryset = super().get_queryset()
+        self.search_query = self.request.GET.get("search", None)
+        if self.search_query:
+            queryset = queryset.filter(name__icontains=self.search_query)
         if category_pk:
             self.current_category = get_object_or_404(Category, pk=category_pk)
             queryset = queryset.filter(category=self.current_category)
@@ -55,6 +59,7 @@ class ProductListView(ListView):
         context["categories"] = Category.objects.all()
         context["current_category"] = self.current_category
         context["all_products_count"] = Product.objects.all().count()
+        context["search_query"] = self.search_query
         return context
 
 
