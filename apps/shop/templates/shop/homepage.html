@@ -34,7 +34,7 @@
         </div>
         <div class="col-lg-8 col-xl-9 pl-0 py-2">
             <div class="banner-slide-container bg-white bg-lg-none ">
-                {% for banner in banners|slice:2 %}
+                {% for banner in banners|slice %}
                 <div class="banner-slide p-2 bg-white  banner-slide-300">
                     <img src="{{ banner.image.url }}" alt="banner image">
                 </div>
@@ -58,7 +58,7 @@
             {% with banners=category.get_active_banners %}
             {% if banners %}
             <div class="banner-slide-container py-2 mx-0">
-                {% for banner in banners|slice:2 %}
+                {% for banner in banners %}
                 <div class="banner-slide bg-white p-2  p-md-3 rounded">
                     <img src="{{ banner.image.url }}">
                 </div>
@@ -68,7 +68,7 @@
             {% endif %}
             {% endwith %}
             <div class="products-grid shadow- b-white">
-                {% for product in category.products.all|slice:10 %}
+                {% for product in category.products.all|slice:6 %}
                 {% include 'shop/_partials/_product_card.html' %}
 
                 {% endfor %}
