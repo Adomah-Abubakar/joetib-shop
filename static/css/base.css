@@ -341,6 +341,10 @@ body *::-webkit-scrollbar-thumb {
 }
 
 @media screen and (max-width: 567px) {
+  .bg-xs-none{
+    background: none;
+    background-color: none;
+  }
   .banner-slide-300 img {
     height: 150px;
   }
