@@ -324,6 +324,7 @@ body *::-webkit-scrollbar-thumb {
 
 .banner-slide {
   min-width: calc(50% - 10px);
+  border-radius: 10px;
 }
 .banner-slide:first-child:nth-last-child(1) {
   width: 100%;
@@ -347,8 +348,8 @@ body *::-webkit-scrollbar-thumb {
     height: 150px;
   }
   .banner-slide {
-    width: 80%;
-    min-width: calc(80% - 10px);
+    width: 90%;
+    min-width: calc(90% - 10px);
   }
   
   .banner-slide-container {
