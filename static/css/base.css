@@ -280,7 +280,7 @@ a, a:hover {
 
 @media screen and (max-width: 567px) {
   .banner-slide-300 {
-    height: 30vh;
+    height: 150px;
   }
   .banner-slide-container{
     grid-auto-flow: row;
