@@ -51,7 +51,13 @@
         {% for category in categories %}
         <!-- End mobile category filter -->
         <div class="col-12 px-0 px-sm-2 pt-4 ">
-            {% if not forloop.counter0 == 0 %}
+            
+            
+            <div class=" shadow- bg-primary text-white-fixed p-3">
+                <a href="{{ category.get_absolute_url }}"> {{ category }}</a>
+
+            </div>
+
             {% with banners=category.get_active_banners %}
             {% if banners %}
             <div class="banner-slide-container py-2 my-2 mx-0">
@@ -64,11 +70,6 @@
 
             {% endif %}
             {% endwith %}
-            {% endif %}
-            <div class=" shadow- bg-primary text-white-fixed p-3">
-                <a href="{{ category.get_absolute_url }}"> {{ category }}</a>
-
-            </div>
             
             <div class="products-grid shadow- b-white">
                 {% for product in category.products.all|slice:6 %}
