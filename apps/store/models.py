@@ -48,6 +48,7 @@ class Product(models.Model):
 
     def __str__(self) -> str: 
         return self.name
+
     def get_price (self)-> str:
         if self.discount_price:
             return self.discount_price
@@ -61,6 +62,13 @@ class Product(models.Model):
 
     def get_update_url(self) -> str:
         return reverse('store:create-update-product', kwargs={'pk': self.pk})
+
+class ProductImage(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name="extra_images" )
+    image = models.ImageField(upload_to="extra-product-images/")
+
+    def __str__(self):
+        return self.product.name
 
 class Supply(models.Model):
     date_created = models.DateTimeField(auto_now_add=True)

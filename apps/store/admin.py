@@ -9,7 +9,9 @@ class CategoryAdmin(admin.ModelAdmin):
 @admin.register(models.Product)
 class ProductAdmin(admin.ModelAdmin):
     list_display = ("name", "category", "price")
-
+@admin.register(models.ProductImage) 
+class ProductImageAdmin(admin.ModelAdmin):
+    pass
 @admin.register(models.Supply)
 class SupplyAdmin(admin.ModelAdmin):
     pass

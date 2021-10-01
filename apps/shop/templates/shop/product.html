@@ -8,7 +8,18 @@
 
             <div class="product-detail-image">
 
-                <img class="img-fluid" src="{{ product.image.url }}">
+                
+                <div class="banner-slide-container pl-1 pl-md-0 py-2 my-2 mx-0">
+                    <div class="banner-slide product-banner-slide bg-white p-2  p-md-3 rounded">
+                        <img class="ig-fluid" src="{{ product.image.url }}">
+
+                    </div>
+                    {% for image in product.extra_images.all %}
+                    <div class="banner-slide product-banner-slide bg-white p-2  p-md-3 rounded">
+                        <img src="{{ image.image.url }}">
+                    </div>
+                    {% endfor %}
+                </div>
             </div>
 
 

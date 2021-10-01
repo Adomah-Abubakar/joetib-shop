@@ -324,7 +324,14 @@ body *::-webkit-scrollbar-thumb {
   min-width: calc(50% - 10px);
   border-radius: 10px;
 }
-
+.banner-slide.product-banner-slide {
+  min-width: 100%;
+  width: 100%;
+}
+.banner-slide.product-banner-slide img {
+  height: 350px;
+  
+}
 .banner-slide:first-child:nth-last-child(1) {
   width: 100%;
 }
