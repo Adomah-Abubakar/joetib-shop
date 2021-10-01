@@ -2,9 +2,9 @@
 
 
 {% block content %}
-<div class="container py-md-3 pb-0 px-2 pt-2 ">
+<div class="container py-md-3 pb-0  pt-2 ">
 
-    <div class="row bg-white bg-lg-none  py-1 pl-3 px-md-0 pl-md-0 py-md-3">
+    <div class="row bg-white bg-lg-none px-1  py-1 pl-3 px-md-0 pl-md-0 py-md-3">
         <div class="col-lg-4 col-xl-3 py-3 d-none d-lg-block">
             <div class="shadow- bg-main h-100 py-3">
 
@@ -51,8 +51,8 @@
         {% for category in categories %}
         <!-- End mobile category filter -->
         <div class="col-12 px-0 px-sm-2 pt-4 ">
-            
-            
+
+
             <div class=" shadow- bg-primary text-white-fixed p-3">
                 <a href="{{ category.get_absolute_url }}"> {{ category }}</a>
 
@@ -70,7 +70,7 @@
 
             {% endif %}
             {% endwith %}
-            
+
             <div class="products-grid shadow- b-white">
                 {% for product in category.products.all|slice:6 %}
                 {% include 'shop/_partials/_product_card.html' %}
