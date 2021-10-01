@@ -28,7 +28,6 @@ class HomePage(ListView):
 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data()
-        context["all_categories"] = Category.objects.all()
         context["banners"] = Banner.objects.filter(category=None)[:5]
         context["all_products_count"] = Product.objects.all().count()
 
