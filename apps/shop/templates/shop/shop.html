@@ -11,7 +11,8 @@
                     <div class="row">
                         <div class=" col-md-6 py-1 d-flex flex-column justify-content-center">
 
-                            <p class="m-0">Search results for : <span class="font-weight-bold">{{ search_query }}</span></p>
+                            <p class="m-0">Search results for : <span class="font-weight-bold">{{ search_query }}</span>
+                            </p>
                         </div>
                         <div class="col-md-6 py-1 d-flex flex-column justify-content-center">
                             {% include "shop/_partials/_search_form.html" %}
@@ -20,6 +21,24 @@
                 </div>
             </div>
         </div>
+        {% endif %}
+
+        {% if current_category %}
+        {% with banners=current_category.get_active_banners %}
+        {% if banners %}
+        <div class="col-12">
+
+            <div class="banner-slide-container py-2 my-2 mx-0">
+                {% for banner in banners %}
+                <div class="banner-slide bg-white p-2  p-md-3 rounded">
+                    <img src="{{ banner.image.url }}">
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        {% endif %}
+        {% endwith %}
         {% endif %}
         <!-- Start Desktop Category filter -->
         <div class="col-sm-4 col-md-4 d-none d-md-block pt-4 px-0 px-sm-2 col-lg-3">
@@ -59,8 +78,9 @@
         <div class="col-12 d-block d-md-none ">
             <p>
 
-                <button class="btn w-100 my-3 mx-0  py-3 custom-btn-primary text-white-fixed shadow" type="button" data-toggle="collapse"
-                    data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+                <button class="btn w-100 my-3 mx-0  py-3 custom-btn-primary text-white-fixed shadow" type="button"
+                    data-toggle="collapse" data-target="#collapseExample" aria-expanded="false"
+                    aria-controls="collapseExample">
                     Toggle Filters
                 </button>
             </p>
@@ -110,6 +130,7 @@
                 {% if current_category %} / <a href="{% url 'shop:product-list' %}"> {{ current_category }}</a>
                 {% endif %}
             </div>
+
             <div class="products-grid shadow- b-white">
                 {% for product in products %}
                 {% include 'shop/_partials/_product_card.html' %}
