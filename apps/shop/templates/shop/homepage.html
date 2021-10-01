@@ -51,13 +51,9 @@
         {% for category in categories %}
         <!-- End mobile category filter -->
         <div class="col-12 px-0 px-sm-2 pt-4 ">
-            <div class=" shadow- bg-primary text-white-fixed p-3">
-                <a href="{{ category.get_absolute_url }}"> {{ category }}</a>
-
-            </div>
             {% with banners=category.get_active_banners %}
             {% if banners %}
-            <div class="banner-slide-container py-2 mx-0">
+            <div class="banner-slide-container py-2 my-2 mx-0">
                 {% for banner in banners %}
                 <div class="banner-slide bg-white p-2  p-md-3 rounded">
                     <img src="{{ banner.image.url }}">
@@ -67,6 +63,11 @@
 
             {% endif %}
             {% endwith %}
+            <div class=" shadow- bg-primary text-white-fixed p-3">
+                <a href="{{ category.get_absolute_url }}"> {{ category }}</a>
+
+            </div>
+            
             <div class="products-grid shadow- b-white">
                 {% for product in category.products.all|slice:6 %}
                 {% include 'shop/_partials/_product_card.html' %}
