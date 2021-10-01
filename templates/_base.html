@@ -269,14 +269,14 @@
   <footer class="footer bg-white ">
     <div class="container">
       <div class="row py-4">
-        <div class="col-sm-6 col-md-4 py-3">
+        <div class="col-6 col-md-4 py-3">
           <h6 class='font-weight-bold'>Important links.</h6> 
           <p class="m-0 py-1"><a href="{% url 'shop:home-page' %}">Home</a></p>
           <p class="m-0 py-1"><a href="{% url 'shop:product-list' %}">Shop</a></p>
           <p class="m-0 py-1"><a href="#">About Us</a></p>
           <p class="m-0 py-1"><a href="#">Terms and Conditions</a></p>
         </div>
-        <div class="col-sm-6 col-md-4 py-3">
+        <div class="col-6 col-md-4 py-3">
           <h6 class='font-weight-bold'>Categories</h6> 
           {% for category in all_categories %}
           <p class="m-0 py-1"><a href="{{ category.get_absolute_url }}">{{ category }}</a></p>
@@ -284,7 +284,7 @@
           {% endfor %}
 
         </div>
-        <div class="col-md-4 py-2">
+        <div class="col-6 col-md-4 py-2">
           <h6 class='font-weight-bold'>Location</h6> 
           <p class="m-0 py-1">Kintampo</p>
           <p class="m-0 py-1">Bono-East Region</p>
