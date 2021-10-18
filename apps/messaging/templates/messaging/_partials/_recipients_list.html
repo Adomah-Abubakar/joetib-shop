@@ -1,0 +1,38 @@
+<div class="row">
+    {% for recipient in sms_message.recipients.all %}
+    <div class="col-md-4 col-lg-3 py-3">
+        <div class="bg-white rounded py-2">
+            <div class="container">
+
+                <h6 class="m-0">{{ recipient.username }}</h6>
+                <small>{{ recipient.email }}</small>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+    <div class="col-12"></div>
+    {% for recipient in sms_message.other_recipients.all %}
+    <div class="col-md-4 col-lg-3 py-3">
+        <div class="bg-white rounded py-2">
+            <div class="container">
+
+                <h6 class="m-0">{{ recipient.name }}</h6>
+                <small>{{ recipient.phone_number }}</small>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+    <div class="col-12"></div>
+    {% for recipient in sms_message.get_other_numbers_list %}
+    <div class="col-md-4 col-lg-3 py-3">
+        <div class="bg-white rounded py-2">
+            <div class="container">
+
+                <small>{{ recipient }}</small>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+
+    
+</div>

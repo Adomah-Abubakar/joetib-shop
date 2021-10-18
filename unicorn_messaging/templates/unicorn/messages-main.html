@@ -1,0 +1,29 @@
+<div class="container py-5">
+    <div class="bg-whit py-5 px-3">
+
+        <h1>Messages</h1>
+
+        <div class="row pt-5">
+            {% for message in messages %}
+            <div class="col-md-4">
+                <div class="p-3 bg-white rounded">
+                    <p>{{ message.message }}</p>
+                    <div class="d-flex justify-content-between flex-wrap">
+                        
+                        <p class="co m-0 text-muted">
+                            {% if message.sent %}
+                            <i class="fa fa-check text-accent" aria-hidden="true"></i> Sent
+                            {% else %}
+                            <i class="fa fa-times-circle" aria-hidden="true"></i> Not Sent
+                            {% endif %}
+                        </p>
+                        <p class="co m-0 text-muted">
+                            {{ message.get_recipients_count }} recipients
+                        </p>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>

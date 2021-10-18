@@ -11,4 +11,21 @@ class CustomUserAdmin(UserAdmin):
     model = CustomUser
     list_display = ['email', 'username',]
 
+    fieldsets = [
+        *UserAdmin.fieldsets,
+    ]
+    #readonly_fields = ['ruser', 'referral_code']
+    fieldsets.insert(
+        2,
+        (
+            None,
+            {
+                "fields": (
+                    "phone_number",
+                )
+            }
+        )
+    )
+
+
 admin.site.register(CustomUser, CustomUserAdmin)

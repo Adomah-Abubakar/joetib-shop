@@ -3,12 +3,15 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf.urls.static import static
 from django.conf import settings
+
 urlpatterns = [
+    path("unicorn/", include("django_unicorn.urls")),
     path('admin/', admin.site.urls),
     path('accounts/', include('allauth.urls')),
     path('pages/', include('apps.pages.urls')),
-    path('', include('apps.shop.urls', namespace="shop")),
     path('store/', include('apps.store.urls', namespace="store")),
+    path('messaging/', include('apps.messaging.urls', namespace="messaging")),
+    path('', include('apps.shop.urls', namespace="shop")),
 ]
 
 if settings.DEBUG:

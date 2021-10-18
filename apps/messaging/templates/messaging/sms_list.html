@@ -1,0 +1,41 @@
+{% extends "_base.html" %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="bg-whit py-5 px-3">
+
+        <h1 class="pb-3">Messages</h1>
+        <a href="{% url 'messaging:create-sms' %}" class="btn btn-lg custom-btn-primary text-white-fixed">Send New</a>
+        <div class="row pt-3">
+            {% for message in sms_messages %}
+            <div class="col-md-4 py-3">
+                <a href="{{ message.get_absolute_url }}">
+                    <div class="p-3 bg-white h-100 rounded d-flex flex-column justify-content-between">
+                        <p>{{ message.message }}</p>
+                        <div class="d-flex justify-content-between flex-wrap">
+
+                            <p class="co m-0 text-muted">
+                                {% if message.sent %}
+                                <i class="fa fa-check text-accent" aria-hidden="true"></i> Sent
+                                {% else %}
+                                <i class="fa fa-times-circle" aria-hidden="true"></i> Not Sent
+                                {% endif %}
+                            </p>
+                            <p class="co m-0 text-muted">
+                                {{ message.get_recipients_count }} recipients
+                            </p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            {% endfor %}
+            <div class="col-12 py-5">
+                <div class="bg-white pb-1">
+
+                    {% include 'shop/_partials/_pagination.html' %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

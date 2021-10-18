@@ -1,0 +1,39 @@
+{% extends "_base.html" %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="bg-whit py-5 px-3">
+
+        <h1>Message Details</h1>
+
+        <div class="row pt-5">
+            <div class="col-md-12">
+                <div class="p-3 bg-white rounded">
+                    <p>{{ sms_message.message }}</p>
+                    <div class="d-flex justify-content-between flex-wrap">
+                        
+                        <p class="co m-0 text-muted">
+                            {% if sms_message.sent %}
+                            <i class="fa fa-check text-accent" aria-hidden="true"></i> Sent
+                            {% else %}
+                            <i class="fa fa-times-circle" aria-hidden="true"></i> Not Sent
+                            {% endif %}
+                        </p>
+                        <p class="co m-0 text-muted">
+                            {{ sms_message.get_recipients_count }} recipients
+                        </p>
+                        <p class="co m-0 text-muted">
+                            {{ sms_message.date_created }} 
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12 py-5">
+                {% include 'messaging/_partials/_recipients_list.html' %}
+            </div>
+            
+        </div>
+    </div>
+</div>
+{% endblock %}

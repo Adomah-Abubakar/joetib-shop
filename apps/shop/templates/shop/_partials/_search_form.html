@@ -1,7 +1,7 @@
 <form action="{% url 'shop:product-list' %}" method="GET">
     <div class="d-flex flex-row m-0">
 
-        <input name="search" class="form-control form-lg rounded-0 w-100 m-0" required type="search" {% if search_query %}value="{{ search_query }}"{% endif %} placeholder="type search query">
+        <input name="search" class="form-control form-lg rounded-0 w-100 m-0" required type="search" {% if search_query %}value="{{ search_query }}"{% endif %} placeholder="search...">
         <button type="submit" class="btn btn-primary rounded-0 m-0"><i class="fa fa-search" aria-hidden="true"></i></button>
     </div>
 </form>

@@ -1,4 +1,5 @@
 {% load static %}
+{% load unicorn %}
 <!DOCTYPE html>
 <html lang="en">
 
@@ -19,6 +20,7 @@
     integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
   <link rel="stylesheet" href="{% static 'css/base.css' %}">
   {% endblock %}
+  {% unicorn_scripts %}
 </head>
 
 <body>
@@ -41,20 +43,7 @@
             <li class="nav-item active">
               <a class="nav-link" href="{% url 'shop:product-list' %}">Shop <span class="sr-only">(current)</span></a>
             </li>
-            <li class="nav-item active">
-              <a class="nav-link" href="{% url 'shop:cart' %}">Cart <span class="sr-only">(current)</span></a>
-            </li>
-            {% if request.user.is_superuser %}
-            <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
-                aria-haspopup="true" aria-expanded="false">
-                Messaging
-              </a>
-              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                <a class="dropdown-item" href="{% url 'messaging:sms-list' %}">Sms</a>
-              </div>
-            </li>
-            {% endif %}
+            
 
             {% if request.user.is_superuser %}
             <!-- <li class="nav-item active">
@@ -72,30 +61,12 @@
 
           </ul>
           <ul class="navbar-nav">
-            <li id="navbarSearchContainer"
-              class="nav-item navbarSearchContainer hidden d-flex align-items-center h-100 ">
-              <form class=" w-100" action="{% url 'shop:product-list' %}" method="GET">
-                <input name="search" placeholder="search" class="custom-search-form-control" id="navbarSearchInput" required type="text">
-              </form>
-              <button class="btn bg-transparent text-danger font-weight-bold m-0" id="navbarSearchTogglerClose"><i
-                  class="fa fa-times" aria-hidden="true"></i></button>
-              <a href="#" class="btn bg-transparent nav-link m-0" id="navbarSearchTogglerOpen"><i class="fa fa-search"
-                  aria-hidden="true"></i></a>
-            </li>
+            
             {% if request.user.is_authenticated %}
             <li class="nav-item active">
               <a class="nav-link" href="{% url 'account_logout' %}">Log Out <span class="sr-only">(current)</span></a>
             </li>
-            
-            <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
-                aria-haspopup="true" aria-expanded="false">
-                {{ request.user.email }}
-              </a>
-              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                <a class="dropdown-item" href="{% url 'shop:order-list' %}">Orders</a>
-              </div>
-            </li>
+            <li class="nav-item"><span class="nav-link">{{ request.user.email }}</span></li>
             {% else %}
             <li class="nav-item active">
               <a class="nav-link" href="{% url 'account_login' %}">Log In <span class="sr-only">(current)</span></a>
@@ -145,30 +116,7 @@
   <!-- End Messages section -->
 
   <div class="">
-    <!-- 
-      {% block sidebarleft %}
-      <div class="col-2 col-md-2 col-lg-3 col-xl-2 bg-dark text-light py-3 h-100">
-        <ul class="list-unstyled sidebar-nav">
-          <li class="position-relative">
-            <div class="sidebar-navitem">
-              <i class="fas fa-plus"></i>
-              <span>Hello</span>
-            <p class="m-0 bg-dark text">Add Product</span>
-            </div>
-          </li>
-          <li class="position-relative">
-
-          <div class="sidebar-navitem">
-            <i class="fas fa-plus"></i>
-            <span>Hello</span>
-            <p class="m-0 bg-dark text">Add Product</p>
-            </div>
-          </li>
-        </ul>
-
-
-      </div>
-      {% endblock sidebarleft %} -->
+    
     {% block content %}
     <div class="col-12">
       <div class="jumbotron bg-dark rounded-0">
@@ -182,126 +130,24 @@
       </div>
     </div>
     {% endblock content %}
-    <!-- {% block sidebarright %}
-      <div class="col-2 col-md-4 col-lg-3 col-xl-2 bg-dark text-light py-3 h-100">
-        <div class="shadow">
-          <h3>Active Order</h3>
-          <hr>
-          <div class="card-body">
-            hello
-          </div>
-        </div>
-
-
-      </div>
-      {% endblock sidebarright %} -->
+    
   </div>
 
 
-  <div class="container my-5 pt-3">
-
-
-    {% if recentlist %}
-
-
-    <!-- Start related-product Area -->
-    <section class="related-product-area section_gap_bottom py-5">
-      <div class="container">
-        <div class="row justify-content-center">
-          <div class="col-lg-6 text-center">
-            <div class="section-title">
-              <h1>Recently Viewed Products
-              </h1>
-            </div>
-          </div>
-        </div>
-        <div class="row">
-          {% for item in recentlist %}
-          <div class="col-lg-4 col-md-4 col-sm-6 py-3 mb-20">
-            <div class="single-related-product d-flex">
-              <a href="#"><img src="{{ item.image.url }}" class="img-thumbnail"
-                  style='object-fit:cover; min-width:80px; min-height:80px;width:80px; height:80px;' alt=""></a>
-              <div class="desc pl-3">
-                <a href="{{ item.get_absolute_url }}" class="product-card-name">{{ item.name|truncatechars:30 }}</a>
-                <div class="price pt-1">
-                  {% if item.discount_price %}
-                  <h6 class="product-card-price">GH&#8373;{{ item.discount_price }}</h6>
-                  <h6 class="product-card-discount-price">GH&#8373;{{ item.price }}</h6>
-                  {% else %}
-                  <h6 class="product-card-price">GH&#8373;{{ item.price }}</h6>
-                  {% endif %}
-                </div>
-                <p class="pt-1">{{ item.description|truncatewords:6 }}</p>
-              </div>
-            </div>
-          </div>
-          {% endfor %}
-        </div>
-      </div>
-    </section>
-    <!-- End related-product Area -->
-    {% endif %}
-
-
-
-
-    {% if wishlist %}
-
-    <!-- Start related-product Area -->
-    <section class="related-product-area section_gap_bottom">
-      <div class="container">
-        <div class="row justify-content-center">
-          <div class="col-lg-6 text-center">
-            <div class="section-title">
-              <h1>Your Wishlist</h1>
-              <p>Waiting for you to make purchase </p>
-            </div>
-          </div>
-        </div>
-        <div class="row" id="wishes">
-          {% for item in wishlist %}
-          <div class="col-lg-4 col-md-4 col-sm-6 py-3 mb-20" id="wish-item-{{ item.id }}">
-            <div class="product-card d-flex">
-              <a href="#"><img src="{{ item.image.url }}" class="img-thumbnail"
-                  style='min-width:70px; min-height:70px;width:70px; height:70px; object-fit: cover;' alt=""></a>
-              <div class="desc pl-2">
-                <a href="{{ item.get_absolute_url }}" class="product-card-name">{{ item.name|truncatechars:30 }}</a>
-                <div class="price">
-                  {% if item.discount_price %}
-                  <h6 class="product-card-price">GH&#8373;{{ item.discount_price }}</h6>
-                  <h6 class="product-card-discount-price">GH&#8373;{{ item.price }}</h6>
-                  {% else %}
-                  <h6 class="product-card-price">{{ item.price }}</h6>
-                  {% endif %}
-                </div>
-              </div>
-            </div>
-          </div>
-          {% endfor %}
-        </div>
-      </div>
-    </section>
-    <!-- End related-product Area -->
-
-    {% endif %}
-
-
-
-  </div>
 
 
   <footer class="footer bg-white ">
     <div class="container">
       <div class="row py-4">
         <div class="col-6 col-md-4 py-3">
-          <h6 class='font-weight-bold'>Important links.</h6>
+          <h6 class='font-weight-bold'>Important links.</h6> 
           <p class="m-0 py-1"><a href="{% url 'shop:home-page' %}">Home</a></p>
           <p class="m-0 py-1"><a href="{% url 'shop:product-list' %}">Shop</a></p>
           <p class="m-0 py-1"><a href="#">About Us</a></p>
           <p class="m-0 py-1"><a href="#">Terms and Conditions</a></p>
         </div>
         <div class="col-6 col-md-4 py-3">
-          <h6 class='font-weight-bold'>Categories</h6>
+          <h6 class='font-weight-bold'>Categories</h6> 
           {% for category in all_categories %}
           <p class="m-0 py-1"><a href="{{ category.get_absolute_url }}">{{ category }}</a></p>
 
@@ -309,7 +155,7 @@
 
         </div>
         <div class="col-6 col-md-4 py-2">
-          <h6 class='font-weight-bold'>Location</h6>
+          <h6 class='font-weight-bold'>Location</h6> 
           <p class="m-0 py-1">Kintampo</p>
           <p class="m-0 py-1">Bono-East Region</p>
           <p class="m-0 py-1"><a href="tel:011111111">Call Us</a></p>

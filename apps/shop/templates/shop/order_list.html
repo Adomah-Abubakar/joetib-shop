@@ -8,19 +8,19 @@
 
 <!--================Cart Area =================-->
 <section class="cart_area">
-    <div class="container-fluid">
 
-        <div class="container">
-            <h1 class="pt-5">Order History</h1>
-            <div class="col-5 pb-2">
-                <hr>
-            </div>
-            <div class="py-3">
-                <table class="table bg-white table-striped">
+    <div class="container">
+        <h1 class="pt-5">Order History</h1>
+        <div class="col-5 pb-2">
+            <hr>
+        </div>
+        <div class="py-3 ">
+            <div class="overflow-x-auto">
+
+                <table class="table bg-white table-striped ">
                     <thead class="bg-primary font-weight-bold text-white-fixed py-5">
                         <td class="py-3">Order ID</td>
                         <td class="py-3">Date</td>
-                        <td class="py-3">Payment Method</td>
                         <td class="py-3">Number of items</td>
                         <td class="py-3">Total Amount</td>
                         <td class="py-3">Completed</td>
@@ -30,26 +30,37 @@
 
                         {% for order in orders %}
                         <tr>
-                            <td>{{ order.id }}</td>
-                            <td>{{ order.ordered_date }}</td>
-                            <td>{{ order.get_payment_method_display }}</td>
-                            <td>{{ order.get_number_of_items }}</td>
-                            <td>GH&#8373;{{ order.amount }}</td>
-                            <td>{{ order.is_completed }}</td>
                             <td>
-                                <a class="btn btn-sm btn-accent text-white-fixed" href="{{ order.get_absolute_url }}">Details</a>
+                                <a class="text-primary font-weight-bold" href="{{ order.get_absolute_url }}">{{ order.id }}</a>
+                            </td>
+                            <td>
+                                <a href="{{ order.get_absolute_url }}">{{ order.ordered_date }}</a>
+                            </td>
+                            <td>
+                                <a href="{{ order.get_absolute_url }}">{{ order.get_number_of_items }}</a>
+                            </td>
+                            <td>
+                                <a href="{{ order.get_absolute_url }}">GH&#8373;{{ order.amount }}</a>
+                            </td>
+                            <td>
+                                <a href="{{ order.get_absolute_url }}">{{ order.is_completed }}</a>
+                            </td>
+                            <td>
+                                <a class="btn btn-sm btn-accent text-white-fixed"
+                                    href="{{ order.get_absolute_url }}">Details</a>
                             </td>
                         </tr>
                         {% endfor %}
 
                     </tbody>
                 </table>
-                <div class="bg-white  pb-2">
-
-                    {% include "shop/_partials/_pagination.html" %}
-                </div>
-
             </div>
+
+            <div class="bg-white  pb-2">
+
+                {% include "shop/_partials/_pagination.html" %}
+            </div>
+
         </div>
     </div>
 </section>

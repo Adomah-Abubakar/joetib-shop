@@ -49,11 +49,14 @@ INSTALLED_APPS = [
     "crispy_forms",
     "crispy_bootstrap5",
     "debug_toolbar",
+    "django_unicorn",
     # Local
     "apps.accounts",
     "apps.pages",
     "apps.store",
     "apps.shop",
+    "apps.messaging",
+    "unicorn_messaging",
 ]
 
 # MIDDLEWARE
@@ -230,6 +233,7 @@ EMAIL_HOST_PASSWORD = env("EMAIL_HOST_PASSWORD")
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
 SMS_API_KEY = env("SMS_API_KEY")
+SMS_SENDER_ID = env("SMS_SENDER_ID")
 ENABLE_MESSAGING = env("ENABLE_MESSAGING")
 PAYSTACK_PRIVATE_KEY = env("PAYSTACK_SECRET_KEY")
 PAYSTACK_PUBLIC_KEY = env("PAYSTACK_PUBLIC_KEY")
