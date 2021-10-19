@@ -313,9 +313,9 @@ body *::-webkit-scrollbar-thumb {
                     {% for product in product_group %}
                     <td style="padding: 5px;">
                         <div class="product-card bg-white">
-                            <a href="{{ product.get_absolute_url }}">
+                            <a href="{{ host_name }}{{ product.get_absolute_url }}">
                                 <div class="product-card-image">
-                                    <img src="{{ product.image.url }}">
+                                    <img src="{{ host_name }}{{ product.image.url }}">
                                 </div>
                                 <div class="product-card-description">
                                     <p class="product-card-name">{{ product.name }}</h5>
