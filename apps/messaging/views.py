@@ -57,11 +57,24 @@ def create_sms(request: HttpRequest) -> HttpResponse:
 def send_email(request: HttpRequest):
     title = request.GET.get("title", "Hello welcome to " + str(timezone.now()))
     site= Site.objects.first()
+
+
+    def myyield(a, count):
+        start = 0
+        end = len(a)
+        while start < end:
+            if start < end-count:
+                yield a[start:start+count]
+            else:
+                yield a[start:]
+            start += count
+        
+
     
     email = render_to_string(
         "emails/test.html",
         context={
-            "products": Product.objects.all(),
+            "products": myyield(Product.objects.all(),1),
             "sms_messages": Sms.objects.all(),
             "host_name": site.domain.strip('/'),
         },

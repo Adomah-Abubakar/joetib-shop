@@ -168,9 +168,7 @@ textarea.form-control {
   background: white;
   color: #444;
   padding:3px 2px;
-  min-width: 150px;
-  max-width: 170px;
-  float: left;
+  
 }
 
 .product-card:hover {
@@ -220,26 +218,9 @@ a, a:hover {
   text-decoration: none;
 }
 
-.sidebar-navitem {
-  padding: 20px 5px;
-  margin: 5px 0;
-  position: relative;
-  display: flex;
-  align-items: center;
-}
 
-.sidebar-nav {
-  height: 95vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
 
-.sidebar-navitem:hover {
-  position: relative;
-  border-bottom: 2px solid #444;
-  border-top: 2px solid #444;
-}
+
 
 .overflow-x-auto {
   overflow-x: auto;
@@ -257,7 +238,7 @@ body *::-webkit-scrollbar-track {
   background: transparent;
 }
 
-overflow-auto::-webkit-scrollbar-track {
+.overflow-auto::-webkit-scrollbar-track {
   background: #f1f1f1;
 }
 
@@ -287,22 +268,7 @@ body *::-webkit-scrollbar-thumb {
   background: #777;
 }
 
-@media only screen and (max-width: 567px) {
-  /* For mobile devices */
-  .sidebar-navitem .text {
-    display: none;
-  }
-  .sidebar-navitem:hover .text {
-    min-width: 150px;
-    height: 100%;
-    top: 0;
-    position: absolute;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    left: 100%;
-  }
-}
+
 
 .text-lg {
   font-size: 1.2em;
@@ -316,146 +282,9 @@ body *::-webkit-scrollbar-thumb {
   font-size: 0.7rem;
 }
 
-.alert-error {
-  background: rgb(196, 55, 55);
-  color: white;
-}
 
-.banner-slide-container {
-  display: flex;
-  overflow-x: auto;
-  white-space: nowrap;
-  gap: 10px;
-}
 
-.banner-slide {
-  min-width: calc(50% - 10px);
-  border-radius: 10px;
-}
 
-.banner-slide.product-banner-slide {
-  min-width: 100%;
-  width: 100%;
-}
-
-.banner-slide.product-banner-slide img {
-  height: 350px;
-}
-
-.banner-slide:first-child:nth-last-child(1) {
-  width: 100%;
-}
-
-.banner-slide.product-banner-slide:first-child:nth-last-child(1) {
-  width: 100% !important;
-}
-
-.banner-slide img {
-  height: 200px;
-  width: 100%;
-  object-position: center;
-  object-fit: cover;
-}
-
-.banner-slide-300 img {
-  height: 350px;
-}
-
-@media screen and (max-width:992px) {
-  /* Medium screen */
-  .bg-lg-none {
-    background: unset !important;
-  }
-}
-
-@media screen and (max-width:768px) {
-  /* Medium screen */
-  .bg-md-none {
-    background: unset !important;
-  }
-}
-
-@media screen and (max-width: 576px) {
-  /* sm small screen */
-  .bg-xs-none {
-    background: unset !important;
-    background-color: unset !important;
-  }
-  .banner-slide.product-banner-slide {
-    min-width: 90%;
-    width: 90%;
-  }
-  .banner-slide-300 img {
-    height: 150px;
-  }
-  .banner-slide img {
-    height: 150px;
-  }
-  .banner-slide {
-    width: 90%;
-    min-width: calc(90% - 10px);
-  }
-  .banner-slide-container {
-    grid-auto-flow: row;
-    grid-auto-columns: unset;
-    grid-template-rows: repeat(1fr, 2);
-    gap: 10px;
-  }
-}
-
-.h-250 {
-  height: 250px;
-}
-
-.img-default {
-  object-fit: cover;
-  width: 100%;
-  height: 100%;
-  object-position: center;
-}
-
-.navbarSearchContainer.make-active #navbarSearchTogglerOpen {
-  display: none;
-}
-
-.navbarSearchContainer.hidden #navbarSearchTogglerClose {
-  display: none;
-}
-
-.navbarSearchContainer.make-active #navbarSearchTogglerClose {
-  display: block;
-}
-
-.navbarSearchContainer.make-active #navbarSearchInput {
-  display: block;
-}
-
-#navbarSearchInput {
-  transition: 2.6s ease-in;
-  display: block;
-}
-
-#navbarSearchTogglerClose {
-  display: block;
-}
-
-.navbarSearchContainer.hidden #navbarSearchInput {
-  display: none;
-  width: 0;
-  border-radius: 0;
-}
-.custom-search-form-control{
-  min-width: 50px;
-  width: 100%;
-  padding: 15px 5px 15px 20px;
-  border:none;
-  outline: none;
-  background: transparent;
-}
-.navbarSearchContainer.make-active {
-  border-radius: 25px;
-  background: #f4f4ff;
-}
 
     </style>
     <style>
@@ -476,27 +305,38 @@ body *::-webkit-scrollbar-thumb {
     </style>
 </head>
 <body>
-    <div class="products-grid shadow- b-white">
-        {% for product in products %}
-        <div class="product-card">
-            <a href="{{ host_name }}{{ product.get_absolute_url }}">
-                <div class="product-card-image">
-                    <img src="{{ host_name }}{{ product.image.url }}">
-                </div>
-                <div class="product-card-description">
-                    <p class="product-card-name">{{ product.name }}</h5>
-                    <p class="product-card-category">{{ product.category }}</p>
-                    {% if product.discount_price %}
-                    <p class="product-card-price">GH&#8373;{{ product.discount_price }}</p>
-                    <p class="product-card-discount-price">GH&#8373;{{ product.price }}</p>
-                    {% else %}
-                    <p class="product-card-price">GH&#8373;{{ product.price }}</p>
-                    {% endif %}
-                </div>
-            </a>
+    <div class="bg-main products-grid shadow- b-white">
+        <table>
+            <tbody>
+                {% for product_group in products %}
+                <tr>
+                    {% for product in product_group %}
+                    <td style="padding: 5px;">
+                        <div class="product-card bg-white">
+                            <a href="{{ product.get_absolute_url }}">
+                                <div class="product-card-image">
+                                    <img src="{{ product.image.url }}">
+                                </div>
+                                <div class="product-card-description">
+                                    <p class="product-card-name">{{ product.name }}</h5>
+                                    <p class="product-card-category">{{ product.category }}</p>
+                                    {% if product.discount_price %}
+                                    <p class="product-card-price">GH&#8373;{{ product.discount_price }}</p>
+                                    <p class="product-card-discount-price">GH&#8373;{{ product.price }}</p>
+                                    {% else %}
+                                    <p class="product-card-price">GH&#8373;{{ product.price }}</p>
+                                    {% endif %}
+                                </div>
+                            </a>
+                        
+                        </div>
+                    </td>
+                    {% endfor %}
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
         
-        </div>
-        {% endfor %}
     </div>
     
 </body>
