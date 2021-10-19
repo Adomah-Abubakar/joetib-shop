@@ -79,7 +79,7 @@ def send_email(request: HttpRequest):
             "host_name": site.domain.strip('/'),
         },
     )
-    #return HttpResponse(email)
+    return HttpResponse(email)
     soup = BeautifulSoup(email)
     
     send_mail(

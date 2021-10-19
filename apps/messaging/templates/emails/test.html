@@ -279,7 +279,8 @@
         }
 
         .text-sm {
-            font-size: 0.7rem;
+            font-size: 11px;
+            ;
         }
     </style>
     <style>
@@ -301,7 +302,9 @@
             box-sizing: border-box;
 
         }
-
+        .wrapper * {
+            box-sizing: border-box;
+        }
         .three-columns {
             font-size: 0;
             padding-bottom: 30px;
@@ -319,6 +322,13 @@
             padding: 1px;
         }
 
+        .text-truncate {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            width: 100%;
+            max-width: 100%;
+        }
+
         @media screen and (max-width: 400px) {
             .product-card {
                 width: 50%;
@@ -329,6 +339,7 @@
         body {
             background: #ccffff;
         }
+
 
         .btn {
             background: black;
@@ -342,6 +353,7 @@
             background: white;
 
         }
+
         .h-100 {
             height: 100%;
         }
@@ -375,52 +387,70 @@
 
 
                                         {% for product in products %}
-                                        <table class="product-card h-100">
-                                            <tr class="h-100">
-                                                <td class="h-100" style="padding-top: 4px; padding-bottom: 4px;">
-                                                    <a href="{{ host_name }}{{product.get_absolute_url }}">
+                                        <div class="product-card">
+                                            <table role="presentation" cellpadding="0" cellspacing="0" width="100%;" class="  h-100" style="padding-top: 2px;">
 
-                                                        <table class="content bg-white h-100" style="text-align: center;">
-                                                            <tr>
-                                                                <td>
-                                                                    <img style="height: 200px; width:100%; object-fit:contain;"
-                                                                        src="{{ host_name }}{{ product.image.url }}"
-                                                                        alt="product image" title="{{ product.name }}">
-                                                                </td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td style="text-align:center; ">
-                                                                    <span class="product-car" style="font-weight:bold;">
-                                                                        {{ product.name }}
-                                                                    </span>
+                                                <tbody class="bg-white" style="width: 100%; height: 100%;">
+                                                    <tr></tr>
+                                                    <tr class="h-100" style="width: 100%;">
 
-                                                                    <p class="product-card-description text-sm"
-                                                                        style="margin: 0; padding-top: 3px; ">
-                                                                        {{ product.description |truncatechars:20 }}
-                                                                    </p>
-                                                                </td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>
-                                                                    {% if product.discount_price %}
-                                                                    <p class="product-card-price">
-                                                                        GH&#8373;{{ product.discount_price }}
-                                                                    </p>
-                                                                    <p class="product-card-discount-price">
-                                                                        GH&#8373;{{ product.price }}
-                                                                    </p>
-                                                                    {% else %}
-                                                                    <p class="product-card-price">
-                                                                        GH&#8373;{{ product.price }}
-                                                                    </p>
-                                                                    {% endif %}
-                                                                </td>
-                                                            </tr>
-                                                        </table>
-                                                    </a>
-                                                </td>
-                                            </tr>
-                                        </table>
+                                                        <td class="h-100"
+                                                            style="padding-top: 4px; width: 100%; padding-bottom: 4px;">
+                                                            <div>
+                                                                <a class="h-100"
+                                                                    href="http://{{ host_name }}{{product.get_absolute_url }}">
+
+                                                                    <table class="content bg-white h-100"
+                                                                        style=" width: 100%;">
+                                                                        <tbody>
+                                                                            <tr>
+                                                                                <td style="width: 100%;">
+                                                                                    <img style="height: 200px; width:100%; object-fit:cover;"
+                                                                                        src="http://{{ host_name }}{{ product.image.url }}"
+                                                                                        alt="product image"
+                                                                                        title="{{ product.name }}">
+                                                                                    
+                                                                                </td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td class="text-truncate"
+                                                                                    style="width: 100%; text-align:center; padding-top: 5px; padding-bottom: 5px; padding-left: 2px;">
+                                                                                    <p class="product-car text-truncate" style="margin: 0;">
+                                                                                        {{ product.name }} 
+                                                                                    </p>
+                                                                                    <p class="text-truncate text-sm" style="margin: 0;">{{ product.description }}</p>
+
+
+                                                                                </td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td style="width: 100%; text-align:center;"">
+                                                                                {% if product.discount_price %}
+                                                                                <p class=" product-card-price">
+                                                                                    GH&#8373;
+                                                                                    {{ product.discount_price}}
+                                                                                    </p>
+                                                                                    <p
+                                                                                        class="product-card-discount-price">
+                                                                                        GH&#8373;
+                                                                                        {{ product.price }}
+                                                                                    </p>
+                                                                                    {% else %}
+                                                                                    <p class="product-card-price">
+                                                                                        GH&#8373;{{ product.price }}
+                                                                                    </p>
+                                                                                    {% endif %}
+                                                                                </td>
+                                                                            </tr>
+                                                                        </tbody>
+                                                                    </table>
+                                                                </a>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
                                         {% endfor %}
                                     </td>
                                 </tr>
