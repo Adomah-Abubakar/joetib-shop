@@ -14,6 +14,7 @@ from .forms import SmsForm
 from bs4 import BeautifulSoup
 from django.contrib.staticfiles import finders
 from django.contrib.sites.models import Site
+from django.utils import timezone
 
 # Create your views here.
 
@@ -54,7 +55,7 @@ def create_sms(request: HttpRequest) -> HttpResponse:
 
 
 def send_email(request: HttpRequest):
-    
+    title = request.GET.get("title", "Hello welcome to " + str(timezone.now()))
     site= Site.objects.first()
     
     email = render_to_string(
@@ -68,7 +69,7 @@ def send_email(request: HttpRequest):
     soup = BeautifulSoup(email)
     
     send_mail(
-        subject="Hello there",
+        subject=title,
         message=soup.get_text(),
         from_email=settings.DEFAULT_FROM_EMAIL,
         recipient_list=["otiboatengjoe@gmail.com"],
