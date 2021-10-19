@@ -74,11 +74,12 @@ def send_email(request: HttpRequest):
     email = render_to_string(
         "emails/test.html",
         context={
-            "products": myyield(Product.objects.all(),1),
+            "products": myyield(Product.objects.all(),3),
             "sms_messages": Sms.objects.all(),
             "host_name": site.domain.strip('/'),
         },
     )
+    return HttpResponse(email)
     soup = BeautifulSoup(email)
     
     send_mail(
