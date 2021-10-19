@@ -18,7 +18,7 @@ class Contact(models.Model):
 class Sms(models.Model):
     message = models.TextField()
     recipients = models.ManyToManyField(User, related_name="received_sms", blank=True)
-    other_recipients = models.ManyToManyField(Contact, blank=True, null=True, related_name="received_sms")
+    other_recipients = models.ManyToManyField(Contact, blank=True, related_name="received_sms")
     other_numbers  = models.TextField(blank=True, help_text="Enter phone numbers seperated by commas (,)")
     is_draft = models.BooleanField(default=False)
     sent = models.BooleanField(default=False)
