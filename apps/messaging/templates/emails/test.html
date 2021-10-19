@@ -342,6 +342,9 @@
             background: white;
 
         }
+        .h-100 {
+            height: 100%;
+        }
     </style>
 </head>
 
@@ -372,12 +375,12 @@
 
 
                                         {% for product in products %}
-                                        <table class="product-card ">
-                                            <tr>
-                                                <td style="padding-top: 4px; padding-bottom: 4px;">
+                                        <table class="product-card h-100">
+                                            <tr class="h-100">
+                                                <td class="h-100" style="padding-top: 4px; padding-bottom: 4px;">
                                                     <a href="{{ host_name }}{{product.get_absolute_url }}">
 
-                                                        <table class="content bg-white" style="text-align: center;">
+                                                        <table class="content bg-white h-100" style="text-align: center;">
                                                             <tr>
                                                                 <td>
                                                                     <img style="height: 200px; width:100%; object-fit:contain;"
@@ -400,13 +403,16 @@
                                                             <tr>
                                                                 <td>
                                                                     {% if product.discount_price %}
-                                                                    <p class="product-card-price">GH&#8373;{{
-                                                                        product.discount_price }}</p>
-                                                                    <p class="product-card-discount-price">GH&#8373;{{
-                                                                        product.price }}</p>
+                                                                    <p class="product-card-price">
+                                                                        GH&#8373;{{ product.discount_price }}
+                                                                    </p>
+                                                                    <p class="product-card-discount-price">
+                                                                        GH&#8373;{{ product.price }}
+                                                                    </p>
                                                                     {% else %}
-                                                                    <p class="product-card-price">GH&#8373;{{
-                                                                        product.price }}</p>
+                                                                    <p class="product-card-price">
+                                                                        GH&#8373;{{ product.price }}
+                                                                    </p>
                                                                     {% endif %}
                                                                 </td>
                                                             </tr>
