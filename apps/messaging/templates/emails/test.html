@@ -311,9 +311,15 @@
             font-size: 0;
             padding-bottom: 30px;
         }
+        .uppercase {
+            text-transform: uppercase;
+        }
 
         .main {}
+        .banner {
+            width: 600px;
 
+        }
         .product-card {
             vertical-align: top;
             display: inline-block;
@@ -330,10 +336,23 @@
             width: 100%;
             max-width: 100%;
         }
-
+        @media screen and (max-width: 567px){
+            .banner {
+                width: 567px;
+            }
+            .wrapper {
+                width: 567px;
+            }
+        }
         @media screen and (max-width: 400px) {
             .product-card {
                 width: 50%;
+            }
+            .banner {
+                width: 400px;
+            }
+            .wrapper {
+                width: 400px;
             }
         }
 
@@ -341,7 +360,10 @@
         body {
             background: #ccffff;
         }
-
+        .banner-img {
+            height: 20vh;
+            object-fit: cover;
+        }
 
         .btn {
             background: black;
@@ -369,20 +391,36 @@
             <div class="main">
                 <table>
                     <tr>
-                        <td class="bg-primary text-white">
-                            <p style="padding:10px; color: white; text-align: center;">JotiMall</p>
+                        <td class="bg-white text-dark">
+                            <h3 style="font-weight: bolder; padding:10px; text-align: center;">JotiMall</h3>
                         </td>
                     </tr>
                     <tr>
-                        <td class="bg-accent">
-                            <p style="padding: 40px;">a</p>
+                        <td class="bg-white banne">
+                            <img class="banne banner-img" style="width: 100%;" src="{{ banner.image.url }}" title="{{ banner.title }}" href="{{host_name}}{{ banner.image.url }}">
+                            
                         </td>
                     </tr>
 
                     <!-- Products -->
                     <tr>
                         <td>
+                            {% for category in categories %}
                             <table width="100%" style="border-spacing: 0;">
+                                <tr>
+                                    <td class="text-white bg-primary" style="text-align: center;">
+                                        <h4 style="width: 100%;">{{ category }}</h4>
+                                    </td>
+                                </tr>
+                                {% with category.banners.all as banners %}
+                                {% if banners %}
+                                <tr>
+                                    <td>
+                                        <img class="banne banner-img" style="width: 100%;" src="{{ banners.first.image.url }}" title="{{ banners.first.title }}" href="{{host_name}}{{ banner.image.url }}">
+                                    </td>
+                                </tr>
+                                {% endif %}
+                                {% endwith %}
                                 <tr>
 
                                     <td class="three-columns" style="padding: 0; margin: 0;">
@@ -419,20 +457,21 @@
                                                                                 <td class="text-truncate"
                                                                                     style="width: 100%; text-align:center; padding-top: 5px; padding-bottom: 5px; padding-left: 2px;">
                                                                                     <div>
+                                                                                        <p class="text-truncate uppercase text-sm "
+                                                                                            style="font-weight: bold;margin: 0; height:14px;">
+                                                                                            {{product.category }}
+                                                                                        </p>
                                                                                         <p class=" text-truncate"
-                                                                                            style="height:18px; margin: 0;">
+                                                                                            style="height:36px; margin: 0;">
                                                                                             {{product.name|truncatechars:24}}
                                                                                         </p>
-                                                                                        <p class="text-truncate text-sm "
-                                                                                            style="margin: 0; height:14px;">
-                                                                                            {{product.description }}
-                                                                                        </p>
+                                                                                        
                                                                                     </div>
 
                                                                                 </td>
                                                                             </tr>
                                                                             <tr>
-                                                                                <td style="width: 100%; text-align:center;"">
+                                                                                <td style="width: 100%; height:32px; text-align:center;">
                                                                                 {% if product.discount_price %}
                                                                                 <p class=" product-card-price">
                                                                                     GH&#8373;
@@ -463,9 +502,21 @@
                                     </td>
                                 </tr>
                             </table>
+                            {% endfor %}
                         </td>
                     </tr>
                     <!-- End Products -->
+                    <!-- Footer -->
+                    <tr>
+                        <td class="banner">
+                            <div style="padding-bottom:20px; padding-top: 30px;">
+                                <div class="bg-white" style="text-align: center; padding-top: 20px; padding-bottom: 10px; padding-left:10px; padding-right: 10px;">
+                                    <p>&copy;Copyright Jotimall</p>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <!-- EndFooter -->
                 </table>
             </div>
         </div>

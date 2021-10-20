@@ -3,7 +3,7 @@ from django.shortcuts import redirect, render
 from django.views import View
 from django.views.generic import TemplateView, ListView, DetailView
 from django.http.request import HttpRequest
-from apps.store.models import Product
+from apps.store.models import Banner, Category, Product
 from django.http.response import HttpResponse
 from django.contrib import messages
 from apps.messaging.models import Sms
@@ -74,12 +74,13 @@ def send_email(request: HttpRequest):
     email = render_to_string(
         "emails/test.html",
         context={
-            "products": list(Product.objects.all()) * 4,
-            "sms_messages": Sms.objects.all(),
+            "categories": Category.objects.all() ,
+            'products': list(Product.objects.all()) ,
+            'banner': Banner.objects.first(),
             "host_name": site.domain.strip('/'),
         },
     )
-    return HttpResponse(email)
+    #return HttpResponse(email)
     soup = BeautifulSoup(email)
     
     send_mail(
