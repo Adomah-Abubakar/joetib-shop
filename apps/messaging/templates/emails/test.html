@@ -397,7 +397,7 @@
                     </tr>
                     <tr>
                         <td class="bg-white banne">
-                            <img class="banne banner-img" style="width: 100%;" src="{{ banner.image.url }}" title="{{ banner.title }}" href="{{host_name}}{{ banner.image.url }}">
+                            <img class="banne banner-img" style="width: 100%;" src="{{ host_name }}{{ banner.image.url }}" title="{{ banner.title }}" href="{{host_name}}{{ banner.image.url }}">
                             
                         </td>
                     </tr>
@@ -416,7 +416,7 @@
                                 {% if banners %}
                                 <tr>
                                     <td>
-                                        <img class="banne banner-img" style="width: 100%;" src="{{ banners.first.image.url }}" title="{{ banners.first.title }}" href="{{host_name}}{{ banner.image.url }}">
+                                        <img class="banne banner-img" style="width: 100%;" src="{{ host_name }}{{ banners.first.image.url }}" title="{{ banners.first.title }}" >
                                     </td>
                                 </tr>
                                 {% endif %}
