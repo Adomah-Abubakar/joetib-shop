@@ -54,6 +54,18 @@
                 <a class="dropdown-item" href="{% url 'messaging:sms-list' %}">Sms</a>
               </div>
             </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
+                aria-haspopup="true" aria-expanded="false">
+                Store
+              </a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <a class="dropdown-item" href="{% url 'store:product-list' %}">Products</a>
+                <a class="dropdown-item" href="{% url 'store:create-update-product' %}">Create Product</a>
+                <a class="dropdown-item" href="{% url 'store:create-supply' %}">Create Product</a>
+                <a class="dropdown-item" href="{% url 'store:supply-list' %}">Supply</a>
+              </div>
+            </li>
             {% endif %}
 
             {% if request.user.is_superuser %}
