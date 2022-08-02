@@ -52,11 +52,11 @@ INSTALLED_APPS = [
     "django_unicorn",
     "import_export",
     # Local
-    "apps.accounts",
-    "apps.pages",
-    "apps.store",
-    "apps.shop",
-    "apps.messaging",
+    "accounts",
+    "pages",
+    "store",
+    "shop",
+    "messaging",
     "unicorn_messaging",
 ]
 
@@ -96,7 +96,7 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
-                "apps.shop.context.global_context",
+                "shop.context.global_context",
             ],
         },
     },

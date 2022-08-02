@@ -36,12 +36,15 @@ class Sms(models.Model):
         return reverse("messaging:sms-detail", kwargs={'pk': self.pk})
     
     def get_other_numbers_list(self):
+        if not self.other_numbers.strip():
+            return []
         return [number.strip() for number in self.other_numbers.split(',')] 
     
     def get_recipients_count(self):
-        if not self.other_numbers:
-            return self.recipients.count()
-        return self.recipients.count() + len(self.other_numbers.split())
+        count = self.recipients.count() + self.other_recipients.count()
+        if  self.other_numbers:
+            count += len(self.get_other_numbers_list())
+        return count
 
     def send_sms(self, *args, **kwargs):
         # TODO: fix send

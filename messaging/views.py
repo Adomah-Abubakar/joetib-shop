@@ -3,10 +3,10 @@ from django.shortcuts import redirect, render
 from django.views import View
 from django.views.generic import TemplateView, ListView, DetailView
 from django.http.request import HttpRequest
-from apps.store.models import Banner, Category, Product
+from store.models import Banner, Category, Product
 from django.http.response import HttpResponse
 from django.contrib import messages
-from apps.messaging.models import Sms
+from messaging.models import Sms
 from django.conf import settings
 from django.template.loader import render_to_string
 from django.core.mail import send_mail

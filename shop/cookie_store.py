@@ -1,6 +1,6 @@
 
 
-from apps.store.models import Product
+from store.models import Product
 
 
 

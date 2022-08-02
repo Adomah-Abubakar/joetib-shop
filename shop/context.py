@@ -1,5 +1,5 @@
 from .cookie_store import RecentList, WishList
-from apps.store.models import Category
+from store.models import Category
 def global_context(request)->dict:
     
     return {

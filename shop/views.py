@@ -1,7 +1,7 @@
 import re
 
 from django.contrib.auth import login
-from apps.shop.forms import PaymentChoiceForm
+from shop.forms import PaymentChoiceForm
 from django.db.models import query
 from django.shortcuts import get_object_or_404, render, redirect
 from django.http.response import HttpResponse, JsonResponse
@@ -13,8 +13,8 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.conf import settings
 
 # Create your views here.
-from apps.store.models import Banner, Payment, Product, Category, Order, OrderItem, Address
-from apps.store.forms import AddressForm
+from store.models import Banner, Payment, Product, Category, Order, OrderItem, Address
+from store.forms import AddressForm
 
 from . import cookie_store
 

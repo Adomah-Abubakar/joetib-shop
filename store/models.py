@@ -1,5 +1,5 @@
-from apps.store.utils import get_random_string
-from apps.store.paystack import PayStack
+from store.utils import get_random_string
+from store.paystack import PayStack
 import decimal
 from typing import Tuple
 from django.db import models

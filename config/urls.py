@@ -8,10 +8,10 @@ urlpatterns = [
     path("unicorn/", include("django_unicorn.urls")),
     path('admin/', admin.site.urls),
     path('accounts/', include('allauth.urls')),
-    path('pages/', include('apps.pages.urls')),
-    path('store/', include('apps.store.urls', namespace="store")),
-    path('messaging/', include('apps.messaging.urls', namespace="messaging")),
-    path('', include('apps.shop.urls', namespace="shop")),
+    path('pages/', include('pages.urls')),
+    path('store/', include('store.urls', namespace="store")),
+    path('messaging/', include('messaging.urls', namespace="messaging")),
+    path('', include('shop.urls', namespace="shop")),
 ]
 
 if settings.DEBUG:
