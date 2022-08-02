@@ -17,7 +17,6 @@ class SpecialList:
     def add(self, item):
         if not item.id in self._list:
             self._list.insert(0, item.id)
-            print(self._list)
             self.save()
     
     def remove(self, item):
