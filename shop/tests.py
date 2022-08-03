@@ -2,7 +2,7 @@ from django.test import Client, TestCase, RequestFactory, override_settings
 from django.contrib.sessions.middleware import SessionMiddleware
 from django.urls import reverse
 from config.tests import TEST_MEDIA_ROOT, CustomTestClass, createImage
-from store.models import Category, Order, Product, User
+from store.models import Category, Order, OrderItem, Product, User
 from http import HTTPStatus
 
 middleware = SessionMiddleware(lambda x: x)
@@ -228,5 +228,135 @@ class TestAddToOrder(TestCase):
         self.assertEqual(order.order_items.count(), 1)
         self.assertEqual(order.order_items.first().product, product)
         self.assertRedirects(response, reverse("shop:cart"), status_code=HTTPStatus.FOUND)
+
+
+
+
+@override_settings(
+    STATICFILES_STORAGE="whitenoise.storage.CompressedStaticFilesStorage"
+)
+@override_settings(MEDIA_ROOT=TEST_MEDIA_ROOT)
+class TestAddToCartJson(TestCase):
+    def test_add_product_to_order_when_logged_out(self):
+        category = Category.objects.create(name="test category")
+        product: Product = Product.objects.create(
+            name="Test Product",
+            category=category,
+            price=100,
+            image=createImage(),
+            description="some description",
+        )
+        url = reverse("shop:add-product-to-cart-json", kwargs={"product_pk": product.pk})
+        response = self.client.get(
+            url
+        )
+        self.assertEqual(response.status_code, HTTPStatus.FOUND)
+        self.assertEqual(Order.objects.count(), 0, "User managed to add to cart despite logged out.")
+        self.assertRedirects(response, reverse("account_login") + f"?next={url}", status_code=HTTPStatus.FOUND)
+    
+    def test_add_to_product_when_logged_in(self):
+        User.objects.create_user(username="testuser", email="testemail@email.com", password="test_password")
+        
+        
+        category = Category.objects.create(name="test category")
+        product: Product = Product.objects.create(
+            name="Test Product",
+            category=category,
+            price=100,
+            image=createImage(),
+            description="some description",
+        )
+        client = Client()
+        user= User.objects.first()
+        client.force_login(user)
+        response = client.get(
+            reverse("shop:add-product-to-cart-json", kwargs={"product_pk": product.pk})
+        )
+        self.assertEqual(response.status_code, HTTPStatus.OK, "Adding to cart failed")
+        self.assertEqual(Order.objects.count(), 1)
+        order: Order = Order.objects.first()
+        self.assertEqual(order.user, user)
+        self.assertEqual(order.order_items.count(), 1)
+        self.assertEqual(order.order_items.first().product, product)
+        json_data = response.json()
+        self.assertEqual(json_data['quantity'], 1)
+        self.assertEqual(json_data['total'], "100.00")
+
+    
+    def test_add_to_product_when_logged_in_and_item_is_already_in_order(self):
+        User.objects.create_user(username="testuser", email="testemail@email.com", password="test_password")
+        category = Category.objects.create(name="test category")
+        product: Product = Product.objects.create(
+            name="Test Product",
+            category=category,
+            price=100,
+            image=createImage(),
+            description="some description",
+        )
+        client = Client()
+        user= User.objects.first()
+        client.force_login(user)
+        order = Order.objects.get_or_create(ordered=False, user=user)[0]
+        order_item: OrderItem = OrderItem.objects.create(
+            order=order, product=product, quantity=1
+        )
+        response = client.get(
+            reverse("shop:add-product-to-cart-json", kwargs={"product_pk": product.pk})
+        )
+        self.assertEqual(response.status_code, HTTPStatus.OK, "Adding to cart failed")
+        self.assertEqual(Order.objects.count(), 1)
+        order: Order = Order.objects.first()
+        self.assertEqual(order.user, user)
+        self.assertEqual(order.order_items.count(), 1)
+        self.assertEqual(order.order_items.first().quantity, 2)
+        self.assertEqual(order.order_items.first().product, product)
+        json_data = response.json()
+        self.assertEqual(json_data['quantity'], 2)
+        self.assertEqual(json_data['total'], "200.00")
+
+
+@override_settings(
+    STATICFILES_STORAGE="whitenoise.storage.CompressedStaticFilesStorage"
+)
+@override_settings(MEDIA_ROOT=TEST_MEDIA_ROOT)
+class CartViewTest(TestCase):
+    def test_access_cart_view_without_loggin_in_should_fail(self):
+        url = reverse("shop:cart")
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, HTTPStatus.FOUND, "Unauthenticated user was allowed to view cart")
+        self.assertRedirects(response, reverse("account_login") + f"?next={url}" , status_code=HTTPStatus.FOUND)
+
+    def test_access_cart_view_when_logged_in_should_succeed(self):
+        User.objects.create_user(username="testuser", email="testemail@email.com", password="test_password")
+        user= User.objects.first()
+        self.client.force_login(user)
+        response = self.client.get(reverse("shop:cart"))
+        self.assertEqual(response.status_code, HTTPStatus.OK, "Authenticated User was not able to view cart")
+        self.assertEqual(response.context['order'].order_items.count(), 0)
+
+
+    def test_access_cart_view_when_logged_in_and_there_is_an_item_in_cart_should_succeed(self):
+        User.objects.create_user(username="testuser", email="testemail@email.com", password="test_password")
+        user= User.objects.first()
+        self.client.force_login(user)
+        category = Category.objects.create(name="test category")
+        product: Product = Product.objects.create(
+            name="Test Product",
+            category=category,
+            price=100,
+            image=createImage(),
+            description="some description",
+        )
+        order = Order.objects.get_or_create(ordered=False, user=user)[0]
+        order_item: OrderItem = OrderItem.objects.create(
+            order=order, product=product, quantity=1
+        )
+        response = self.client.get(reverse("shop:cart"))
+        self.assertEqual(response.status_code, HTTPStatus.OK, "Authenticated User was not able to view cart")
+        self.assertEqual(response.context['order'], order)
+        self.assertEqual(response.context['order'].order_items.count(), 1)
+        self.assertEqual(response.context['order'].order_items.first().quantity, 1)
+
+
 
     

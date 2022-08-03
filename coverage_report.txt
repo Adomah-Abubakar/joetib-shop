@@ -50,9 +50,9 @@ shop\cookie_store.py                                                            
 shop\forms.py                                                                              7      0   100%
 shop\migrations\__init__.py                                                                0      0   100%
 shop\models.py                                                                             0      0   100%
-shop\tests.py                                                                            143      9    94%
+shop\tests.py                                                                            219      9    96%
 shop\urls.py                                                                               4      0   100%
-shop\views.py                                                                            192     92    52%
+shop\views.py                                                                            192     81    58%
 store\__init__.py                                                                          0      0   100%
 store\admin.py                                                                            29      0   100%
 store\apps.py                                                                              4      0   100%
@@ -82,4 +82,4 @@ unicorn_messaging\models.py                                                     
 unicorn_messaging\tests.py                                                                 1      0   100%
 unicorn_messaging\views.py                                                                 1      1     0%
 ----------------------------------------------------------------------------------------------------------
-TOTAL                                                                                   1317    375    72%
+TOTAL                                                                                   1393    364    74%
