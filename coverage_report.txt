@@ -46,11 +46,11 @@ shop\__init__.py                                                                
 shop\admin.py                                                                              1      0   100%
 shop\apps.py                                                                               4      0   100%
 shop\context.py                                                                            4      0   100%
-shop\cookie_store.py                                                                      39      7    82%
+shop\cookie_store.py                                                                      39      0   100%
 shop\forms.py                                                                              7      0   100%
 shop\migrations\__init__.py                                                                0      0   100%
 shop\models.py                                                                             0      0   100%
-shop\tests.py                                                                            219      9    96%
+shop\tests.py                                                                            271      9    97%
 shop\urls.py                                                                               4      0   100%
 shop\views.py                                                                            192     81    58%
 store\__init__.py                                                                          0      0   100%
@@ -65,7 +65,7 @@ store\migrations\0005_auto_20210930_1654.py                                     
 store\migrations\0006_productimage.py                                                      5      0   100%
 store\migrations\0007_alter_address_id_alter_banner_id_alter_category_id_and_more.py       4      0   100%
 store\migrations\__init__.py                                                               0      0   100%
-store\models.py                                                                          268    105    61%
+store\models.py                                                                          268    104    61%
 store\paystack.py                                                                         25     15    40%
 store\tests\__init__.py                                                                    0      0   100%
 store\urls.py                                                                              4      0   100%
@@ -82,4 +82,4 @@ unicorn_messaging\models.py                                                     
 unicorn_messaging\tests.py                                                                 1      0   100%
 unicorn_messaging\views.py                                                                 1      1     0%
 ----------------------------------------------------------------------------------------------------------
-TOTAL                                                                                   1393    364    74%
+TOTAL                                                                                   1445    356    75%

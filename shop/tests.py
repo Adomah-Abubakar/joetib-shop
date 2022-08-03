@@ -31,6 +31,57 @@ class TestSpecialList(TestCase):
         self.assertEqual(special_list._list, [2, 1])
         self.assertEqual(session.get("dummy"), [2, 1])
 
+    def test_remove_item_from_list(self):
+        request = Client()
+        special_list = SpecialList(request=request, name="dummy", items_count=10)
+        special_list.add(MockItem(1))
+        special_list.add(MockItem(2))
+        special_list.remove(MockItem(2))
+        session = special_list.session
+        self.assertEqual(session["dummy"], special_list._list)
+        self.assertEqual(special_list._list, [1])
+        self.assertEqual(session.get("dummy"), [1])
+        self.assertEqual(special_list.to_objects(), [])
+
+    def test_item_to_objects_when_product_exists(self):
+        request = Client()
+        special_list = SpecialList(request=request, name="dummy", items_count=10)
+        category = Category.objects.create(name="test category")
+        product: Product = Product.objects.create(
+            name="Test Product",
+            category=category,
+            price=100,
+            image=createImage(),
+            description="some description",
+        )
+        special_list.add(product)
+        session = special_list.session
+        self.assertEqual(session["dummy"], special_list._list)
+        self.assertEqual(special_list._list, [1])
+        self.assertEqual(session.get("dummy"), [1])
+        self.assertEqual(special_list.to_objects(), [product])
+
+    def test_item_list_should_not_have_duplicate_values(self):
+        request = Client()
+        special_list = SpecialList(request=request, name="dummy", items_count=10)
+        category = Category.objects.create(name="test category")
+        product: Product = Product.objects.create(
+            name="Test Product",
+            category=category,
+            price=100,
+            image=createImage(),
+            description="some description",
+        )
+        special_list.add(product)
+        special_list.add(product)
+        special_list.add(product)
+        special_list.add(product)
+        special_list.add(product)
+        session = special_list.session
+        self.assertEqual(session["dummy"], special_list._list)
+        self.assertEqual(special_list._list, [1])
+        self.assertEqual(session.get("dummy"), [1])
+        self.assertEqual(special_list.to_objects(), [product])
 
 class TestWishList(TestCase):
     def test_wish_list_with_two_items(self):
@@ -81,7 +132,27 @@ class TestHomePage(CustomTestClass):
     def test_homepage_works_with_no_http_errors(self):
         response = self.client.get("")
         self.assertEqual(response.status_code, HTTPStatus.OK, "Homepage is not working")
+        self.assertEqual(response.context['banners'].count(), 0)
+        self.assertEqual(response.context['all_products_count'], 0)
+        self.assertEqual(response.context['categories'].count(), 0)
 
+    def test_homepage_works_when_there_is_a_category_and_product(self):
+        category = Category.objects.create(name="test category")
+        product: Product = Product.objects.create(
+            name="Test Product",
+            category=category,
+            price=100,
+            image=createImage(),
+            description="some description",
+        )
+        response = self.client.get("")
+
+        self.assertEqual(response.status_code, HTTPStatus.OK, "Homepage is not working")
+        self.assertEqual(response.context['banners'].count(), 0)
+        self.assertEqual(response.context['all_products_count'], 1)
+        self.assertEqual(response.context['categories'].count(), 1)
+        self.assertEqual(response.context['categories'].first(), category)
+        self.assertEqual(response.context['categories'].first().products.first(), product)
 
 @override_settings(
     STATICFILES_STORAGE="whitenoise.storage.CompressedStaticFilesStorage"
@@ -278,6 +349,8 @@ class TestAddToCartJson(TestCase):
         self.assertEqual(order.user, user)
         self.assertEqual(order.order_items.count(), 1)
         self.assertEqual(order.order_items.first().product, product)
+        self.assertEqual(order.order_items.first().get_single_item_price(), 100)
+        self.assertEqual(order.order_items.first().get_total_price(), 100)
         json_data = response.json()
         self.assertEqual(json_data['quantity'], 1)
         self.assertEqual(json_data['total'], "100.00")
