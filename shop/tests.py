@@ -1,11 +1,16 @@
-from django.test import Client, TestCase, RequestFactory
+from django.test import Client, TestCase, RequestFactory, override_settings
 from django.contrib.sessions.middleware import SessionMiddleware
+from django.urls import reverse
+from config.tests import TEST_MEDIA_ROOT, CustomTestClass, createImage
+from store.models import Category, Order, Product, User
+from http import HTTPStatus
 
 middleware = SessionMiddleware(lambda x: x)
 
 from shop.cookie_store import RecentList, SpecialList, WishList
 
 # Create your tests here.
+
 
 class MockItem:
     def __init__(self, id) -> None:
@@ -14,17 +19,16 @@ class MockItem:
     def __str__(self):
         return "some id"
 
+
 class TestSpecialList(TestCase):
     def test_special_list_with(self):
         request = Client()
-        special_list = SpecialList(
-            request=request ,name="dummy", items_count=10
-        )
+        special_list = SpecialList(request=request, name="dummy", items_count=10)
         special_list.add(MockItem(1))
         special_list.add(MockItem(2))
         session = special_list.session
-        self.assertEqual(session['dummy'], special_list._list)
-        self.assertEqual(special_list._list, [2,1])
+        self.assertEqual(session["dummy"], special_list._list)
+        self.assertEqual(special_list._list, [2, 1])
         self.assertEqual(session.get("dummy"), [2, 1])
 
 
@@ -35,8 +39,8 @@ class TestWishList(TestCase):
         wish_list.add(MockItem(1))
         wish_list.add(MockItem(2))
         session = wish_list.session
-        self.assertEqual(session['wishlist'], wish_list._list)
-        self.assertEqual(wish_list._list, [2,1])
+        self.assertEqual(session["wishlist"], wish_list._list)
+        self.assertEqual(wish_list._list, [2, 1])
         self.assertEqual(session.get("wishlist"), [2, 1])
 
 
@@ -47,10 +51,10 @@ class TestWishList(TestCase):
         recent_list.add(MockItem(1))
         recent_list.add(MockItem(2))
         session = recent_list.session
-        self.assertEqual(session['recentlist'], recent_list._list)
-        self.assertEqual(recent_list._list, [2,1])
+        self.assertEqual(session["recentlist"], recent_list._list)
+        self.assertEqual(recent_list._list, [2, 1])
         self.assertEqual(session.get("recentlist"), [2, 1])
-    
+
     def test_recent_list_with_more_than_six_items(self):
         request = Client()
         recent_list = RecentList(request)
@@ -62,6 +66,167 @@ class TestWishList(TestCase):
         recent_list.add(MockItem(6))
         recent_list.add(MockItem(7))
         session = recent_list.session
-        self.assertEqual(session['recentlist'], recent_list._list)
-        self.assertEqual(recent_list._list, [7,6,5,4,3,2])
-        self.assertEqual(session.get("recentlist"), [7,6,5,4,3,2])
+        self.assertEqual(session["recentlist"], recent_list._list)
+        self.assertEqual(recent_list._list, [7, 6, 5, 4, 3, 2])
+        self.assertEqual(session.get("recentlist"), [7, 6, 5, 4, 3, 2])
+
+
+@override_settings(
+    STATICFILES_STORAGE="whitenoise.storage.CompressedStaticFilesStorage"
+)
+@override_settings(MEDIA_ROOT=TEST_MEDIA_ROOT)
+class TestHomePage(CustomTestClass):
+    """Test to see that no exceptions are raised when trying to access the homepage"""
+
+    def test_homepage_works_with_no_http_errors(self):
+        response = self.client.get("")
+        self.assertEqual(response.status_code, HTTPStatus.OK, "Homepage is not working")
+
+
+@override_settings(
+    STATICFILES_STORAGE="whitenoise.storage.CompressedStaticFilesStorage"
+)
+@override_settings(MEDIA_ROOT=TEST_MEDIA_ROOT)
+class TestProductPage(CustomTestClass, TestCase):
+    """Test to see that no exceptions are raised when trying to access the homepage"""
+
+    def test_product_list_works_with_no_http_errors(self):
+        response = self.client.get(reverse("shop:product-list"))
+        self.assertEqual(response.status_code, HTTPStatus.OK, "Homepage is not working")
+
+    def test_product_list_with_no_products(self):
+        response = self.client.get(reverse("shop:product-list"))
+        self.assertEqual(response.status_code, HTTPStatus.OK, "Homepage is not working")
+        self.assertEqual(response.context["categories"].count(), 0)
+        self.assertEqual(response.context["all_products_count"], 0)
+        self.assertEqual(response.context["search_query"], None)
+        self.assertEqual(response.context["products"].count(), 0)
+
+    def test_product_list_with_products(self):
+        category = Category.objects.create(name="test category")
+        product = Product.objects.create(
+            name="Test Product",
+            category=category,
+            price=100,
+            image=createImage(),
+            description="some description",
+        )
+        response = self.client.get(reverse("shop:product-list"))
+        self.assertEqual(response.status_code, HTTPStatus.OK, "Homepage is not working")
+        self.assertEqual(response.context["categories"].count(), 1)
+        self.assertEqual(response.context["all_products_count"], 1)
+        self.assertEqual(response.context["search_query"], None)
+        self.assertEqual(response.context["products"][0], product)
+
+
+    def test_product_list_with_search_query_when_there_is_no_product_match(self):
+        category = Category.objects.create(name="test category")
+        product = Product.objects.create(
+            name="Test Product",
+            category=category,
+            price=100,
+            image=createImage(),
+            description="some description",
+        )
+        response = self.client.get(reverse("shop:product-list") + "?search=stringthatshouldnotmatch")
+        self.assertEqual(response.status_code, HTTPStatus.OK, "Homepage is not working")
+        self.assertEqual(response.context["categories"].count(), 1)
+        self.assertEqual(response.context["all_products_count"], 1)
+        self.assertEqual(response.context["search_query"],  "stringthatshouldnotmatch")
+        self.assertEqual(response.context["products"].count(), 0)
+    
+    def test_product_list_with_search_query_when_there_is_a_product_match(self):
+        category = Category.objects.create(name="test category")
+        product = Product.objects.create(
+            name="Test Product",
+            category=category,
+            price=100,
+            image=createImage(),
+            description="some description",
+        )
+        response = self.client.get(reverse("shop:product-list") + "?search=test")
+        self.assertEqual(response.status_code, HTTPStatus.OK, "Homepage is not working")
+        self.assertEqual(response.context["categories"].count(), 1)
+        self.assertEqual(response.context["all_products_count"], 1)
+        self.assertEqual(response.context["search_query"],  "test")
+        self.assertEqual(response.context["products"].count(), 1)
+        self.assertEqual(response.context["products"][0], product)
+
+
+
+
+@override_settings(
+    STATICFILES_STORAGE="whitenoise.storage.CompressedStaticFilesStorage"
+)
+@override_settings(MEDIA_ROOT=TEST_MEDIA_ROOT)
+class TestProductDetailPage(CustomTestClass, TestCase):
+    """Test to see that no exceptions are raised when trying to access the homepage"""
+
+    def test_product_list_works_with_id_that_does_not_exist(self):
+        response = self.client.get(reverse("shop:product-detail", kwargs={'pk': 1}))
+        self.assertEqual(response.status_code, HTTPStatus.NOT_FOUND, "Product Detail view should have raised an exception")
+
+    def test_product_detail_with_existing_products(self):
+        category = Category.objects.create(name="test category")
+        product: Product = Product.objects.create(
+            name="Test Product",
+            category=category,
+            price=100,
+            image=createImage(),
+            description="some description",
+        )
+        response = self.client.get(product.get_absolute_url())
+        self.assertEqual(response.status_code, HTTPStatus.OK,)
+        self.assertEqual(response.context["product"], product)
+        self.assertEqual(len(response.context["recentlist"]), 1)
+
+
+@override_settings(
+    STATICFILES_STORAGE="whitenoise.storage.CompressedStaticFilesStorage"
+)
+@override_settings(MEDIA_ROOT=TEST_MEDIA_ROOT)
+class TestAddToOrder(TestCase):
+    def test_add_product_to_order_when_logged_out(self):
+        category = Category.objects.create(name="test category")
+        product: Product = Product.objects.create(
+            name="Test Product",
+            category=category,
+            price=100,
+            image=createImage(),
+            description="some description",
+        )
+        url = reverse("shop:add-product-to-cart", kwargs={"product_pk": product.pk})
+        response = self.client.get(
+            url
+        )
+        self.assertEqual(response.status_code, HTTPStatus.FOUND)
+        self.assertEqual(Order.objects.count(), 0, "User managed to add to cart despite logged out.")
+        self.assertRedirects(response, reverse("account_login") + f"?next={url}", status_code=HTTPStatus.FOUND)
+    
+    def test_add_to_product_when_logged_in(self):
+        User.objects.create_user(username="testuser", email="testemail@email.com", password="test_password")
+        
+        
+        category = Category.objects.create(name="test category")
+        product: Product = Product.objects.create(
+            name="Test Product",
+            category=category,
+            price=100,
+            image=createImage(),
+            description="some description",
+        )
+        client = Client()
+        user= User.objects.first()
+        client.force_login(user)
+        response = client.get(
+            reverse("shop:add-product-to-cart", kwargs={"product_pk": product.pk})
+        )
+        self.assertEqual(response.status_code, HTTPStatus.FOUND, "Adding to cart failed")
+        self.assertEqual(Order.objects.count(), 1)
+        order: Order = Order.objects.first()
+        self.assertEqual(order.user, user)
+        self.assertEqual(order.order_items.count(), 1)
+        self.assertEqual(order.order_items.first().product, product)
+        self.assertRedirects(response, reverse("shop:cart"), status_code=HTTPStatus.FOUND)
+
+    
