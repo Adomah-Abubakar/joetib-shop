@@ -17,6 +17,7 @@ jobs:
     env:
       DB_USERNAME: user
       DB_PASSWORD: password
+      SMS_API_KEY: key
       SMS_SENDER_ID: sender
       ENABLE_MESSAGING: false
       PAYSTACK_PUBLIC_KEY: key
