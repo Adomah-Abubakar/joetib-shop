@@ -1,8 +1,10 @@
-> A batteries-included Django starter project. For a production-ready version see the book [Django for Professionals](https://djangoforprofessionals.com).
+> A django shoping application with inventory tracking.
+
+Locate at [http://jotimall.herokuapp.com](http://jotimall.herokuapp.com) 
 
 ## 🚀 Features
 
-- Django 3.1 & Python 3.8
+- Django 4.1 & Python 3.8
 - Install via [Pip](https://pypi.org/project/pip/), [Pipenv](https://pypi.org/project/pipenv/), or [Docker](https://www.docker.com/)
 - User log in/out, sign up, password reset via [django-allauth](https://github.com/pennersr/django-allauth)
 - Static files configured with [Whitenoise](http://whitenoise.evans.io/en/stable/index.html)
