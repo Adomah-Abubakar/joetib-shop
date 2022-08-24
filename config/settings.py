@@ -16,6 +16,7 @@ env = environ.Env(
     EMAIL_USE_TLS=(bool, True),
     MEDIA_ROOT=(str, str(BASE_DIR.joinpath("media"))),
     STATIC_ROOT=(str, str(BASE_DIR.joinpath("static"))),
+    USE_POSTGRES=(bool, False),
 )
 
 try:
@@ -106,7 +107,20 @@ TEMPLATES = [
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#databases
 
-if DEBUG:
+
+if env("USE_POSTGRES"):
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.postgresql",
+            "NAME": env("DB_NAME"),
+            "USER": env("DB_USERNAME"),
+            "PASSWORD": env("DB_PASSWORD"),
+            "HOST": env("DB_HOST"),
+            "PORT": env("DB_PORT"),
+            'CONN_MAX_AGE': 500,
+        }
+    }
+elif DEBUG:
     DATABASES = {
         "default": {
             "ENGINE": "django.db.backends.sqlite3",
@@ -115,18 +129,18 @@ if DEBUG:
     }
 else:
     DATABASES = {
-        'default': {
+        "default": {
             "ENGINE": "django.db.backends.mysql",
-            'NAME': env('DB_NAME'),
-            'USER': env('DB_USERNAME'),
-            'PASSWORD': env('DB_PASSWORD'),
-            'HOST': env('DB_HOST'),
-            'PORT': env('DB_PORT'),
+            "NAME": env("DB_NAME"),
+            "USER": env("DB_USERNAME"),
+            "PASSWORD": env("DB_PASSWORD"),
+            "HOST": env("DB_HOST"),
+            "PORT": env("DB_PORT"),
             "OPTIONS": {
-                'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
-                'charset': 'utf8mb4',
-                'use_unicode': True,
-            }
+                "init_command": "SET sql_mode='STRICT_TRANS_TABLES'",
+                "charset": "utf8mb4",
+                "use_unicode": True,
+            },
         }
     }
 # PASSWORDS
@@ -167,7 +181,7 @@ USE_TZ = True
 STATIC_URL = "/static/"
 STATIC_ROOT = BASE_DIR / "static"
 MEDIA_URL = "/media/"
-MEDIA_ROOT = env('MEDIA_ROOT')
+MEDIA_ROOT = env("MEDIA_ROOT")
 
 # https://docs.djangoproject.com/en/dev/ref/contrib/staticfiles/#std:setting-STATICFILES_DIRS
 STATICFILES_DIRS = [str(BASE_DIR.joinpath("staticfiles"))]
@@ -225,8 +239,8 @@ DATETIME_FORMAT = "%Y-%m-%d %H:%M:%S"
 if DEBUG:
     EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 else:
-    EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+    EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = env("EMAIL_HOST")
 EMAIL_PORT = env("EMAIL_PORT")
 EMAIL_HOST_USER = env("EMAIL_HOST_USER")
